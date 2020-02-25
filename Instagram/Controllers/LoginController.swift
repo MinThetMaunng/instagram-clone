@@ -90,7 +90,6 @@ class LoginController: UIViewController {
     
     
     override func viewWillLayoutSubviews() {
-        let gradientLayer = CAGradientLayer()
         view.addGradientLayer(locations: [0, 1], colors: primaryColor.cgColor, secondaryColor.cgColor)
     }
     
