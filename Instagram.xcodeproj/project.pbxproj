@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D96C5F78240838840023B008 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D96C5F77240838840023B008 /* SearchController.swift */; };
+		D9C5451F2408B675004A255A /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C5451E2408B675004A255A /* ProfileInfoView.swift */; };
+		D9C545212408BC4A004A255A /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C545202408BC4A004A255A /* Profile.swift */; };
 		D9F2B5592404D248008B0B8A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9F2B5582404D248008B0B8A /* AppDelegate.swift */; };
 		D9F2B55B2404D248008B0B8A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9F2B55A2404D248008B0B8A /* SceneDelegate.swift */; };
 		D9F2B5632404D248008B0B8A /* Instagram.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D9F2B5612404D248008B0B8A /* Instagram.xcdatamodeld */; };
@@ -31,6 +34,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D96C5F77240838840023B008 /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
+		D9C5451E2408B675004A255A /* ProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoView.swift; sourceTree = "<group>"; };
+		D9C545202408BC4A004A255A /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		D9F2B5552404D248008B0B8A /* Instagram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Instagram.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9F2B5582404D248008B0B8A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D9F2B55A2404D248008B0B8A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -105,6 +111,7 @@
 			children = (
 				D9F2B5732404D4CA008B0B8A /* ChatBox.swift */,
 				D9F2B5752404D4D7008B0B8A /* Post.swift */,
+				D9C545202408BC4A004A255A /* Profile.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -116,6 +123,7 @@
 				D9F2B57E2404D5BD008B0B8A /* ChatBoxCell.swift */,
 				D9F2B5802404D5D8008B0B8A /* PostCell.swift */,
 				D9F2B5902404D706008B0B8A /* NotificationCell.swift */,
+				D9C5451E2408B675004A255A /* ProfileInfoView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -131,6 +139,7 @@
 				D9F2B58C2404D6B9008B0B8A /* HomeController.swift */,
 				D9F2B58E2404D6DB008B0B8A /* NotificationController.swift */,
 				D9F2B5922404D728008B0B8A /* ProfileController.swift */,
+				D96C5F77240838840023B008 /* SearchController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -225,12 +234,15 @@
 				D9F2B5762404D4D7008B0B8A /* Post.swift in Sources */,
 				D9F2B5792404D548008B0B8A /* Constants.swift in Sources */,
 				D9F2B5852404D633008B0B8A /* RegisterController.swift in Sources */,
+				D96C5F78240838840023B008 /* SearchController.swift in Sources */,
+				D9C5451F2408B675004A255A /* ProfileInfoView.swift in Sources */,
 				D9F2B5912404D706008B0B8A /* NotificationCell.swift in Sources */,
 				D9F2B57B2404D56A008B0B8A /* Extensions.swift in Sources */,
 				D9F2B57D2404D59B008B0B8A /* InputText.swift in Sources */,
 				D9F2B58F2404D6DB008B0B8A /* NotificationController.swift in Sources */,
 				D9F2B58D2404D6B9008B0B8A /* HomeController.swift in Sources */,
 				D9F2B5872404D654008B0B8A /* MessageController.swift in Sources */,
+				D9C545212408BC4A004A255A /* Profile.swift in Sources */,
 				D9F2B5812404D5D8008B0B8A /* PostCell.swift in Sources */,
 				D9F2B5892404D66D008B0B8A /* FeedController.swift in Sources */,
 			);

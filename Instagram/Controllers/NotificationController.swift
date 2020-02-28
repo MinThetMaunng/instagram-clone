@@ -21,7 +21,7 @@ class NotificationController: UIViewController, UITableViewDelegate, UITableView
     
     private func setupViews() {
         view.backgroundColor = .white
-        
+        navigationItem.title = "Activity"
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(NotificationCell.self, forCellReuseIdentifier: cellId)

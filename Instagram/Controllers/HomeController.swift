@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HomeController: UITabBarController {
+class HomeController: UITabBarController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTabBar()
@@ -21,21 +21,21 @@ class HomeController: UITabBarController {
         tabBar.layer.shadowRadius = 8
         tabBar.layer.shadowColor = UIColor.black.cgColor
         tabBar.layer.masksToBounds = false
-        tabBar.isTranslucent = true
+//        tabBar.isTranslucent = false
         
-        tabBar.unselectedItemTintColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
-        tabBar.tintColor = primaryColor
+        tabBar.unselectedItemTintColor = #colorLiteral(red: 0.1725490196, green: 0.1725490196, blue: 0.1725490196, alpha: 1)
+        tabBar.tintColor = #colorLiteral(red: 0.1725490196, green: 0.1725490196, blue: 0.1725490196, alpha: 1)
         
-        let feedController = createNavigationController(viewController: FeedController(), title: "Feeds", image: "camera_icon", selectedImage: "selected_camera_icon")
-        let messageController = createNavigationController(viewController: MessageController(), title: "Messages", image: "chat_icon", selectedImage: "selected_chat_icon")
-        let notificationController = createNavigationController(viewController: NotificationController(), title: "Notifications", image: "noti_icon", selectedImage: "selected_noti_icon")
+        let feedController = createNavigationController(viewController: FeedController(), title: "Feeds", image: "home_icon", selectedImage: "selected_home_icon")
+        let searchController = createNavigationController(viewController: UIViewController(), title: "Search", image: "search_icon", selectedImage: "selected_search_icon")
+        let createPostController = createNavigationController(viewController: SearchController(), title: "Create Post", image: "plus_icon", selectedImage: "plus_icon")
+        let heartController = createNavigationController(viewController: NotificationController(), title: "Profile", image: "love_icon", selectedImage: "selected_love_icon")
         let profileController = createNavigationController(viewController: ProfileController(), title: "Profile", image: "profile_icon", selectedImage: "selected_profile_icon")
         
-        viewControllers = [feedController, messageController, notificationController, profileController]
+        viewControllers = [feedController, searchController, createPostController, heartController, profileController]
     }
     
     private func createNavigationController(viewController: UIViewController, title: String, image: String, selectedImage: String) -> UIViewController {
-        viewController.title = title
         viewController.tabBarItem.image = UIImage(named: image)?.withRenderingMode(.alwaysTemplate)
         viewController.tabBarItem.selectedImage = UIImage(named: selectedImage)
         viewController.view.backgroundColor = .white
@@ -49,6 +49,6 @@ class HomeController: UITabBarController {
         }
         NotificationCenter.default.post(name: CHANGE_TO_LIGHT, object: nil)
     }
-    
+
 }
 

@@ -22,14 +22,17 @@ class FeedController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     fileprivate func setupViews() {
         view.backgroundColor = .white
+        navigationItem.title = "Instagram"
+
+//        navigationController?.navigationBar.isTranslucent = false
         
-        let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(handleSearch))
-        searchButton.tintColor = .darkGray
-        
+        let arrowButton = UIBarButtonItem(image: UIImage(named: "share"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(goToMessages))
+        arrowButton.tintColor = .darkGray
         let cameraButton = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(handleSearch))
         cameraButton.tintColor = .darkGray
+        
         navigationItem.leftBarButtonItems = [cameraButton]
-        navigationItem.rightBarButtonItems = [searchButton]
+        navigationItem.rightBarButtonItems = [arrowButton]
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -38,6 +41,10 @@ class FeedController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.pin(to: view)
         tableView.register(PostCell.self, forCellReuseIdentifier: cellId)
         
+    }
+    
+    @objc private func goToMessages() {
+        navigationController?.pushViewController(MessageController(), animated: true)
     }
     
     @objc private func handleSearch() {
@@ -61,6 +68,9 @@ class FeedController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return cell
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        tabBarController?.tabBar.isHidden = false
+    }
    
     
 }
