@@ -8,6 +8,19 @@
 
 import UIKit
 
+extension RegisterController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let image = info[.editedImage] as? UIImage
+        profileImage.setImage(image, for: .normal)
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+}
+
 class RegisterController: UIViewController {
     
     let profileImage: UIButton = {
@@ -15,14 +28,26 @@ class RegisterController: UIViewController {
         btn.layer.cornerRadius = 75
         btn.layer.borderColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
         btn.layer.borderWidth = 3
+        btn.clipsToBounds = true
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.titleLabel?.numberOfLines = 1
         btn.titleLabel?.textAlignment = .center
-        
+        btn.imageView?.contentMode = .scaleAspectFill
         let attributedString = NSMutableAttributedString(string: "+", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 80, weight: .thin), NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)])
         btn.setAttributedTitle(attributedString, for: .normal)
+        
+        btn.addTarget(self, action: #selector(chooseProfileImage), for: .touchUpInside)
         return btn
     }()
+    
+    @objc private func chooseProfileImage() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.allowsEditing = true
+        imagePicker.modalPresentationStyle = .overFullScreen
+        present(imagePicker, animated: true, completion: nil)
+    }
     
     let userNameTextField: InputText = {
         let tf = InputText(padding: 24, height: 50, placeholder: "Username")
@@ -95,10 +120,6 @@ class RegisterController: UIViewController {
         view.addSubview(profileImage)
         view.addSubview(stackView)
         view.addSubview(goToLoginButton)
-        
-        
-        
-        
         
         stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50).isActive = true
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50).isActive = true
