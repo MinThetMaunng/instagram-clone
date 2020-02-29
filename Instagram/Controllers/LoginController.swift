@@ -33,7 +33,7 @@ class LoginController: UIViewController {
         
         let attributedString = NSMutableAttributedString(string: "No account yet? ", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .regular)])
         
-        attributedString.append(NSAttributedString(string: "Sign Up here!", attributes: [NSAttributedString.Key.foregroundColor : #colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1), NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .regular)]))
+        attributedString.append(NSAttributedString(string: "Sign Up here!", attributes: [NSAttributedString.Key.foregroundColor : #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .semibold)]))
 
         btn.setAttributedTitle(attributedString, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
