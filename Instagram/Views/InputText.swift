@@ -37,15 +37,14 @@ class InputText: UITextField {
     }
     
     private func setupDesign() {
-        layer.borderColor = UIColor.white.cgColor
-        alpha = 0.4
-        layer.borderWidth = 3
-        layer.cornerRadius = height / 2
+        layer.borderColor = UIColor.lightGray.cgColor
+        layer.borderWidth = 0.3
+        layer.cornerRadius = 5
         autocapitalizationType = .none
-        backgroundColor = .clear
-        attributedPlaceholder = NSAttributedString(string: placeholderString, attributes: [NSAttributedString.Key.foregroundColor : UIColor(white: 1, alpha: 1)])
+        backgroundColor = #colorLiteral(red: 0.9607843137, green: 0.9607843137, blue: 0.9607843137, alpha: 1)
+        attributedPlaceholder = NSAttributedString(string: placeholderString, attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         font = UIFont.boldSystemFont(ofSize: 16)
-        textColor = .white
+        textColor = .black
         translatesAutoresizingMaskIntoConstraints = false
     }
     

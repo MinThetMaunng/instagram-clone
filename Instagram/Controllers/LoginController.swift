@@ -13,43 +13,29 @@ class LoginController: UIViewController {
     let emailTextField: InputText = {
         let tf = InputText(padding: 24, height: 50, placeholder: "Email")
         tf.keyboardType = .emailAddress
-        tf.addTarget(self, action: #selector(run(sender:)), for: .editingChanged)
         return tf
     }()
-    
-    @objc private func run(sender: InputText) {
-        let text = sender.text
-        sender.alpha = text == "" ? 0.4 : 1
-    }
     
     let passwordTextField: InputText = {
         let tf = InputText(padding: 24, height: 50, placeholder: "Password")
         tf.isSecureTextEntry = true
-        tf.addTarget(self, action: #selector(run(sender:)), for: .editingChanged)
         return tf
     }()
     
-    
-    let gradientLayer = CAGradientLayer()
-
-    lazy var loginButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitle("LOG IN", for: .normal)
-        btn.setTitleColor(primaryColor, for: .normal)
-        btn.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        btn.layer.cornerRadius = 25
-        btn.layer.masksToBounds = true
-        btn.backgroundColor = .white
+    lazy var loginButton: CustomButton = {
+        let btn = CustomButton(title: "Login")
         btn.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         return btn
     }()
     
     let goToRegisterButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setTitle("No account yet? Sign up here!", for: .normal)
-        btn.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .ultraLight)
-        btn.setTitleColor(UIColor(white: 1, alpha: 0.6), for: .normal)
+        
+        let attributedString = NSMutableAttributedString(string: "No account yet? ", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .regular)])
+        
+        attributedString.append(NSAttributedString(string: "Sign Up here!", attributes: [NSAttributedString.Key.foregroundColor : #colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1), NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .regular)]))
+
+        btn.setAttributedTitle(attributedString, for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.addTarget(self, action: #selector(goToRegisterScreen), for: .touchUpInside)
         return btn
@@ -73,7 +59,7 @@ class LoginController: UIViewController {
     lazy var stackView: UIStackView = {
         let sv = UIStackView(arrangedSubviews: [self.emailTextField, self.passwordTextField, self.loginButton])
         sv.distribution = .equalSpacing
-        sv.spacing = 30
+        sv.spacing = 20
         sv.axis = .vertical
         sv.backgroundColor = .white
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -88,11 +74,6 @@ class LoginController: UIViewController {
         setupTapGesture()
     }
     
-    
-    override func viewWillLayoutSubviews() {
-        view.addGradientLayer(locations: [0, 1], colors: primaryColor.cgColor, secondaryColor.cgColor)
-    }
-    
     private func setupViews() {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = .white
@@ -101,7 +82,7 @@ class LoginController: UIViewController {
         
         stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50).isActive = true
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50).isActive = true
-        stackView.heightAnchor.constraint(equalToConstant: 210).isActive = true
+        stackView.heightAnchor.constraint(equalToConstant: 190).isActive = true
         stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         
         loginButton.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D9421EAD240A2058003FCEE2 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9421EAC240A2058003FCEE2 /* CustomButton.swift */; };
 		D96C5F78240838840023B008 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D96C5F77240838840023B008 /* SearchController.swift */; };
 		D9C5451F2408B675004A255A /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C5451E2408B675004A255A /* ProfileInfoView.swift */; };
 		D9C545212408BC4A004A255A /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C545202408BC4A004A255A /* Profile.swift */; };
@@ -34,6 +35,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D9421EAC240A2058003FCEE2 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		D96C5F77240838840023B008 /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
 		D9C5451E2408B675004A255A /* ProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoView.swift; sourceTree = "<group>"; };
 		D9C545202408BC4A004A255A /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				D9F2B5802404D5D8008B0B8A /* PostCell.swift */,
 				D9F2B5902404D706008B0B8A /* NotificationCell.swift */,
 				D9C5451E2408B675004A255A /* ProfileInfoView.swift */,
+				D9421EAC240A2058003FCEE2 /* CustomButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 				D9F2B57B2404D56A008B0B8A /* Extensions.swift in Sources */,
 				D9F2B57D2404D59B008B0B8A /* InputText.swift in Sources */,
 				D9F2B58F2404D6DB008B0B8A /* NotificationController.swift in Sources */,
+				D9421EAD240A2058003FCEE2 /* CustomButton.swift in Sources */,
 				D9F2B58D2404D6B9008B0B8A /* HomeController.swift in Sources */,
 				D9F2B5872404D654008B0B8A /* MessageController.swift in Sources */,
 				D9C545212408BC4A004A255A /* Profile.swift in Sources */,
