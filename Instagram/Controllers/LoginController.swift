@@ -10,6 +10,12 @@ import UIKit
 
 class LoginController: UIViewController {
     
+    lazy var loginHud: ModalBox = {
+        let mb = ModalBox()
+        mb.captionLabel.text = "LOGGING IN"
+        return mb
+    }()
+    
     let emailTextField: InputText = {
         let tf = InputText(padding: 24, height: 50, placeholder: "Email")
         tf.keyboardType = .emailAddress
@@ -52,8 +58,9 @@ class LoginController: UIViewController {
         
         emailText == "" ? emailTextField.showErrorMessage() : emailTextField.hideErrorMessage()
         passwordText == "" ? passwordTextField.showErrorMessage() : passwordTextField.hideErrorMessage()
-        let homeController = HomeController()
-        navigationController?.pushViewController(homeController, animated: true)
+        loginHud.show()
+//        let homeController = HomeController()
+//        navigationController?.pushViewController(homeController, animated: true)
     }
     
     lazy var stackView: UIStackView = {
@@ -80,6 +87,9 @@ class LoginController: UIViewController {
         view.addSubview(stackView)
         view.addSubview(goToRegisterButton)
         
+        view.addSubview(loginHud)
+        loginHud.add(to: view)
+        
         stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50).isActive = true
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50).isActive = true
         stackView.heightAnchor.constraint(equalToConstant: 190).isActive = true
@@ -92,6 +102,7 @@ class LoginController: UIViewController {
         goToRegisterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50).isActive = true
         goToRegisterButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         goToRegisterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
+
         
     }
     
