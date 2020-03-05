@@ -12,7 +12,7 @@ class ModalBox: UIView {
     
     let indicatorView: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView(style: .large)
-        ai.tintColor = .white
+        ai.color = .white
         ai.translatesAutoresizingMaskIntoConstraints = false
         return ai
     }()
@@ -46,14 +46,14 @@ class ModalBox: UIView {
         pin(to: view)
     }
     
-    func show() {
+    func show(){
         self.isHidden = false
         UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
             self.alpha = 1.0
         }, completion: nil)
     }
     
-    @objc func hide() {
+    @objc func hide(){
         UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
             self.alpha = 0.0
         }) { complete in

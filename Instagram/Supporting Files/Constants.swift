@@ -14,3 +14,6 @@ let secondaryColor = #colorLiteral(red: 0.1137254902, green: 0.1490196078, blue:
 let CHANGE_TO_DARK = Notification.Name("CHANGE_TO_DARK")
 let CHANGE_TO_LIGHT = Notification.Name("CHANGE_TO_LIGHT")
 
+let BASE_URL = "http://192.168.0.102:3000"
+let SIGNUP_URL = "\(BASE_URL)/users/signup"
+let LOGIN_URL = "\(BASE_URL)/users/login"

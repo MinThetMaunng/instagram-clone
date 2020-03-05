@@ -53,14 +53,38 @@ class LoginController: UIViewController {
     }
     
     @objc private func handleLogin() {
-        let emailText = emailTextField.text
-        let passwordText = passwordTextField.text
+        let emailText = emailTextField.text ?? ""
+        let passwordText = passwordTextField.text ?? ""
         
         emailText == "" ? emailTextField.showErrorMessage() : emailTextField.hideErrorMessage()
         passwordText == "" ? passwordTextField.showErrorMessage() : passwordTextField.hideErrorMessage()
-        loginHud.show()
-//        let homeController = HomeController()
-//        navigationController?.pushViewController(homeController, animated: true)
+        
+        if emailText != "", passwordText != "" {
+            loginHud.show()
+            let parameters = ["email": emailText, "password": passwordText]
+            
+            ApiService.instance.loginRequest(body: parameters) { (result) in
+                switch result {
+                case .success(let response):
+                    switch response.status {
+                    case 200:
+                        self.loginHud.hide()
+                        let homeController = HomeController()
+                        self.navigationController?.pushViewController(homeController, animated: true)
+                        
+                    default:
+                        self.loginHud.hide()
+                    }
+                case .failure(let error):
+                    print("Error")
+                    print(error)
+                    
+                }
+                
+            }
+          
+        }
+
     }
     
     lazy var stackView: UIStackView = {
@@ -77,7 +101,7 @@ class LoginController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupViews()
-        setupNotificationObservers()
+//        setupNotificationObservers()
         setupTapGesture()
     }
     

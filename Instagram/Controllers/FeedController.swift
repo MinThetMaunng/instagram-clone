@@ -52,7 +52,7 @@ class FeedController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     private func setDummyPosts() {
-        let firstPost = Post(userName: "Juric Daniel", profileImage: "juric_daniel", postImage: "convo", status: "I am Juric Daniel.", createdDate: "3rd Feb 2020")
+        let firstPost = Post(userName: "Juric Daniel", profileImage: "juric_daniel", postImage: "gigi1", status: "I am Juric Daniel.", createdDate: "3rd Feb 2020")
         let secondPost =  Post(userName: "Juric Daniel", profileImage: "juric_daniel", postImage: "gigi1", status: "I am Juric Daniel. I am currently working as a freelance iOS developer.", createdDate: "3rd Feb 2020")
         
         posts = [ firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost]
