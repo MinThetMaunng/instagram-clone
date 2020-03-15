@@ -24,11 +24,36 @@ class FeedController: UIViewController, UITableViewDelegate, UITableViewDataSour
         print("Refreshing")
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.getAllPosts()
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        setDummyPosts()
+        getAllPosts()
+//        setDummyPosts()
     }
+    
+    private func getAllPosts() {
+        refreshControl.beginRefreshing()
+        PostApiService.instance.getPostsRequest(limit: 0, skip: 0) { (result) in
+            switch result {
+            case .success(let resp):
+                if let data = resp.data {
+                    self.posts = data
+                    self.tableView.reloadData()
+                    self.refreshControl.endRefreshing()
+                }
+            case .failure(let err):
+                print("ERRORS")
+                print(err)
+            }
+        }
+    }
+    
     
     fileprivate func setupViews() {
         view.backgroundColor = .white
@@ -62,10 +87,10 @@ class FeedController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     private func setDummyPosts() {
-        let firstPost = Post(userName: "Juric Daniel", profileImage: "juric_daniel", postImage: "gigi1", status: "I am Juric Daniel.", createdDate: "3rd Feb 2020")
-        let secondPost =  Post(userName: "Juric Daniel", profileImage: "juric_daniel", postImage: "gigi1", status: "I am Juric Daniel. I am currently working as a freelance iOS developer.", createdDate: "3rd Feb 2020")
-        
-        posts = [ firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost]
+//        let firstPost = Post(userName: "Juric Daniel", profileImage: "juric_daniel", postImage: "gigi1", status: "I am Juric Daniel.", createdDate: "3rd Feb 2020")
+//        let secondPost =  Post(userName: "Juric Daniel", profileImage: "juric_daniel", postImage: "gigi1", status: "I am Juric Daniel. I am currently working as a freelance iOS developer.", createdDate: "3rd Feb 2020")
+//
+//        posts = [ firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost]
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

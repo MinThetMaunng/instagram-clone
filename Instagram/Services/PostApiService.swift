@@ -11,6 +11,23 @@ import UIKit
 class PostApiService {
     static let instance = PostApiService()
     
+    func getPostsRequest(limit: Int, skip: Int, completion: @escaping (Result<GetAllPostResponse, Error>) -> ()) {
+        guard let url = URL(string: "\(GET_ALL_POST_URL)?sort=-createdAt&limit=\(limit)&skip=\(skip)") else { return }
+        var request = URLRequest(url: url)
+        request.setValue("Authorization", forHTTPHeaderField: "\(AuthService.instance.jwtToken)")
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            DispatchQueue.main.async {
+                guard let data = data else { return }
+                do {
+                    let jsonResult = try JSONDecoder().decode(GetAllPostResponse.self, from: data)
+                    completion(.success(jsonResult))
+                } catch(let err) {
+                    completion(.failure(err))
+                }
+            }
+        }.resume()
+    }
+    
     func createPostRequest(body: Parameters, image: UIImage, completion: @escaping (Result<CreatePostResponse , Error>) -> ()) {
        
         guard let imageData = Image(withImage: image, forKey: "image") else { return }

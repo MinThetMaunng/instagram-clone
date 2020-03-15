@@ -46,3 +46,40 @@ extension UIView {
     }
 }
 
+let imageCache = NSCache<NSString, UIImage>()
+
+class CacheImageView: UIImageView {
+    
+    var imageUrlString: String?
+    
+    func loadImageUsingUrl(string urlString: String) {
+        imageUrlString = urlString
+        
+        guard let url = URL(string: urlString) else { return }
+        
+        // if image is already exist in cache
+        if let imageFromCache = imageCache.object(forKey: NSString(string: urlString)){
+            image = imageFromCache
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if error != nil {
+                print("Requesting image from server failed: \(String(describing: error))")
+                return
+            }
+            
+            guard let imageData = data else { return }
+            
+            DispatchQueue.main.async {
+                let imageToCache = UIImage(data: imageData)
+                if self.imageUrlString == urlString {
+                    imageCache.setObject(imageToCache!, forKey: NSString(string: urlString))
+                }
+                self.image = imageToCache
+            }
+        }.resume()
+        
+        
+    }
+}

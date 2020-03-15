@@ -108,20 +108,22 @@ class CreatePostController: UIViewController, UITextViewDelegate {
     @objc private func handlePost(){
         
         if let status = textView.text, let image = chosenImage, textView.textColor == .black {
-            print("Status", status)
             let parameters = ["user": AuthService.instance.userId, "status": status]
             PostApiService.instance.createPostRequest(body: parameters, image: image) { (result) in
                 switch result {
                 case .success(let response):
                     print(response)
+
+                    self.textView.text = nil
+                    self.imagePickerButton.setImage(nil, for: .normal)
+                    self.tabBarController?.selectedIndex = 0
                     
                 case .failure(let error):
                     print(error)
                 }
             }
-            tabBarController?.selectedIndex = 0
-            imagePickerButton.setImage(nil, for: .normal)
-            textView.text = nil
+//            tabBarController?.selectedIndex = 0
+//            imagePickerButton.setImage(nil, for: .normal)
         }
     }
     

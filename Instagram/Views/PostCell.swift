@@ -12,14 +12,16 @@ class PostCell: UITableViewCell {
     
     var post: Post? {
         didSet {
-            userNameLabel.text = post?.userName ?? "Unknown User"
-            userProfileImage.image = UIImage(named: post?.profileImage ?? "unknown_user")
-            postedTimeLabel.text = post?.createdDate ?? "Just Now"
-            postImage.image = UIImage(named: post?.postImage ?? "juric_daniel")
+            userNameLabel.text = post?.user?.username ?? "Unknown User"
+            if let profileUrl = post?.user?.profileImage {
+                userProfileImage.loadImageUsingUrl(string: "\(PROFILE_IMAGE_URL)\(profileUrl)")
+            }
+            postedTimeLabel.text = post?.createdAt ?? "Just Now"
+            if let imageUrl = post?.photo {
+                postImage.loadImageUsingUrl(string: "\(PHOTO_IMAGE_URL)\(imageUrl)")
+            }
             statusLabel.text = post?.status ?? ""
 
-            let estimatedHeight = estimageSize(text: statusLabel.text ?? "").height
-            statusLabel.heightAnchor.constraint(equalToConstant: estimatedHeight)
         }
     }
     
@@ -31,21 +33,20 @@ class PostCell: UITableViewCell {
         return lbl
     }()
     
-    let userProfileImage: UIImageView = {
-        let iv = UIImageView()
-        iv.image = UIImage(named: "unknown_user")
+    let userProfileImage: CacheImageView = {
+        let iv = CacheImageView()
+//        iv.image = UIImage(named: "unknown_user")
         iv.contentMode = .scaleAspectFill
         iv.layer.cornerRadius = 20
         iv.clipsToBounds = true
-        iv.backgroundColor = .clear
+        iv.backgroundColor = .lightGray
         return iv
     }()
     
-    let postImage: UIImageView = {
-        let iv = UIImageView()
-        iv.image = UIImage(named: "juric_daniel")
+    let postImage: CacheImageView = {
+        let iv = CacheImageView()
         iv.contentMode = .scaleAspectFill
-        iv.backgroundColor = .systemBlue
+        iv.backgroundColor = .lightGray
         iv.layer.masksToBounds = true
         return iv
     }()

@@ -8,10 +8,10 @@
 
 import Foundation
 
-struct Post: Codable {
-    let userName: String
-    let profileImage: String?
-    let postImage: String?
-    let status: String?
-    let createdDate: String
-}
+//struct Post: Codable {
+//    let userName: String
+//    let profileImage: String?
+//    let postImage: String?
+//    let status: String?
+//    let createdDate: String
+//}

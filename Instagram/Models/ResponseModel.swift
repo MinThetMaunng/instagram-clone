@@ -29,6 +29,14 @@ struct CreatePostResponse: Codable {
     var error: PostErrorMessage?
 }
 
+struct GetAllPostResponse: Codable {
+    var status: Int
+    var msg: String?
+    var data: [Post]?
+    var error: PostErrorMessage?
+    var total: Int?
+}
+
 struct PostErrorMessage: Codable {
     var user: [String]?
     var status: [String]?
@@ -40,9 +48,20 @@ struct ErrorMessage: Codable {
     var password: [String]?
 }
 
+struct Post: Codable {
+    var _id: String
+    var status: String?
+    var photo: String?
+    var createdAt: String?
+    var updatedAt: String?
+    var user: User?
+    var __v: Int?
+}
+
 
 struct User: Codable {
     var _id: String
+    var photo: String?
     var username: String?
     var email: String?
     var password: String?

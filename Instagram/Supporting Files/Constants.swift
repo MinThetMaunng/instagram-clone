@@ -22,7 +22,11 @@ let LOGIN_URL = "\(BASE_URL)/users/login"
 let SIGNUP_URL = "\(BASE_URL)/users/signup"
 let IMAGE_UPLOAD_URL = "\(BASE_URL)/images/upload"
 
+let GET_ALL_POST_URL = "\(BASE_URL)/posts"
 let CREATE_POST_URL = "\(BASE_URL)/posts"
+
+let PROFILE_IMAGE_URL = "\(BASE_URL)/profileimage/"
+let PHOTO_IMAGE_URL = "\(BASE_URL)/photos/"
 
 enum UserDefaultsKey : String {
     case USER_ID = "userId"
