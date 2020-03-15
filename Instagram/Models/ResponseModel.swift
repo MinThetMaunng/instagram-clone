@@ -6,9 +6,9 @@
 //  Copyright © 2020 Myanmy. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
-struct LoginResult: Codable {
+struct LoginResponse: Codable {
     var status: Int
     var token: String?
     var msg: String?
@@ -16,8 +16,27 @@ struct LoginResult: Codable {
     var error: ErrorMessage?
 }
 
+struct SignupResponse: Codable {
+    var status: Int
+    var msg: String?
+    var error: ErrorMessage?
+}
+
+struct CreatePostResponse: Codable {
+    var status: Int
+    var msg: String?
+    var data: String?
+    var error: PostErrorMessage?
+}
+
+struct PostErrorMessage: Codable {
+    var user: [String]?
+    var status: [String]?
+}
+
 struct ErrorMessage: Codable {
     var email: [String]?
+    var username: [String]?
     var password: [String]?
 }
 

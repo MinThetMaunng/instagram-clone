@@ -14,6 +14,15 @@ class HomeController: UITabBarController, UIImagePickerControllerDelegate, UINav
         setupTabBar()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if AuthService.instance.isLoggedIn == false {
+            let navController = UINavigationController(rootViewController: LoginController())
+            navController.modalPresentationStyle = .fullScreen
+            self.present(navController, animated: false, completion: nil)
+        }
+    }
+    
     private func setupTabBar() {
         
         tabBar.layer.shadowOpacity = 0.12
@@ -28,7 +37,7 @@ class HomeController: UITabBarController, UIImagePickerControllerDelegate, UINav
         
         let feedController = createNavigationController(viewController: FeedController(), title: "Feeds", image: "home_icon", selectedImage: "selected_home_icon")
         let searchController = createNavigationController(viewController: UIViewController(), title: "Search", image: "search_icon", selectedImage: "selected_search_icon")
-        let createPostController = createNavigationController(viewController: SearchController(), title: "Create Post", image: "plus_icon", selectedImage: "plus_icon")
+        let createPostController = createNavigationController(viewController: CreatePostController(), title: "Create Post", image: "plus_icon", selectedImage: "plus_icon")
         let heartController = createNavigationController(viewController: NotificationController(), title: "Profile", image: "love_icon", selectedImage: "selected_love_icon")
         let profileController = createNavigationController(viewController: ProfileController(), title: "Profile", image: "profile_icon", selectedImage: "selected_profile_icon")
         

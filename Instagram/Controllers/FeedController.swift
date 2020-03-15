@@ -14,6 +14,16 @@ class FeedController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var tableView = UITableView()
     var posts = [Post]()
     
+    let refreshControl: UIRefreshControl = {
+        let rc = UIRefreshControl()
+        rc.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        return rc
+    }()
+    
+    @objc private func refreshData() {
+        print("Refreshing")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
@@ -23,12 +33,10 @@ class FeedController: UIViewController, UITableViewDelegate, UITableViewDataSour
     fileprivate func setupViews() {
         view.backgroundColor = .white
         navigationItem.title = "Instagram"
-
-//        navigationController?.navigationBar.isTranslucent = false
         
         let arrowButton = UIBarButtonItem(image: UIImage(named: "share"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(goToMessages))
         arrowButton.tintColor = .darkGray
-        let cameraButton = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(handleSearch))
+        let cameraButton = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(handleCreatePost))
         cameraButton.tintColor = .darkGray
         
         navigationItem.leftBarButtonItems = [cameraButton]
@@ -41,14 +49,16 @@ class FeedController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.pin(to: view)
         tableView.register(PostCell.self, forCellReuseIdentifier: cellId)
         
+        tableView.refreshControl = refreshControl
+        
     }
     
     @objc private func goToMessages() {
         navigationController?.pushViewController(MessageController(), animated: true)
     }
     
-    @objc private func handleSearch() {
-        print("search")
+    @objc private func handleCreatePost() {
+        self.tabBarController?.selectedIndex = 2
     }
     
     private func setDummyPosts() {

@@ -11,31 +11,41 @@ import UIKit
 class ApiService {
     static let instance = ApiService()
     
-    func loginRequest(body: [String: String], completion: @escaping (Result<LoginResult, Error>) -> ()) {
-        guard let url = URL(string: LOGIN_URL) else { return }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: body, options: .init())
-        } catch(let err) {
-            print("JSON Serialization error : \(err)")
-            completion(.failure(err))
+    func createDataBody(withParameters parameters: Parameters?, medias: [Image]?, boundary: String) -> Data {
+        let lineBreak = "\r\n"
+        var body = Data()
+        
+        if let params = parameters {
+            for (key, value) in params {
+                body.append("--\(boundary + lineBreak)")
+                body.append("Content-Disposition: form-data; name=\"\(key)\"\(lineBreak + lineBreak)")
+                body.append("\(value + lineBreak)")
+            }
         }
         
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            DispatchQueue.main.async {
-
-                guard let data = data else { return }
-                do {
-                    let jsonResult = try JSONDecoder().decode(LoginResult.self, from: data)
-                    completion(.success(jsonResult))
-                } catch(let err) {
-                    completion(.failure(err))
-                }
+        if let medias = medias {
+            for media in medias {
+                body.append("--\(boundary + lineBreak)")
+                body.append("Content-Disposition: form-data; name=\"\(media.key)\"; filename=\"\(media.fileName)\"\(lineBreak)")
+                body.append("Content-Type: \(media.mimeType + lineBreak + lineBreak)")
+                body.append(media.data)
+                body.append(lineBreak)
             }
-            
-        }.resume()
+        }
         
+        body.append("--\(boundary)--\(lineBreak)")
+        return body
+    }
+    
+    func generateBoundary() -> String {
+        return "Boundary-\(UUID().uuidString)"
+    }
+}
+
+extension Data {
+    mutating func append(_ string: String) {
+        if let data = string.data(using: .utf8) {
+            append(data)
+        }
     }
 }

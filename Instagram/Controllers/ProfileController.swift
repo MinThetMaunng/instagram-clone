@@ -13,10 +13,16 @@ class ProfileController: UIViewController {
     let cellId = "cellId"
     let tableView = UITableView()
 //    let collectionView = UICollectionView()
+    
+    let logoutHud: ModalBox = {
+        let mb = ModalBox()
+        mb.captionLabel.text = "LOGGING OUT"
+        return mb
+    }()
 
     lazy var titleView: UILabel = {
         let lbl = UILabel()
-        lbl.frame = CGRect(x: self.view.frame.width - 30, y: 10, width: 240, height: 40)
+        lbl.frame = CGRect(x: self.view.frame.width - 30, y: 10, width: 180, height: 40)
         lbl.textAlignment = .center
         lbl.textColor = .black
         lbl.text = "juric_daniel"
@@ -25,28 +31,45 @@ class ProfileController: UIViewController {
         return lbl
     }()
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         
         navigationItem.titleView = titleView
+        let logoutButton = UIBarButtonItem(title: "Log Out", style: .plain, target: self, action: #selector(logout))
+        navigationItem.rightBarButtonItems = [logoutButton]
         
+        setupTableView()
+        setupViews()
+    }
+    
+    @objc private func logout(){
+        logoutHud.show()
+        AuthService.instance.isLoggedIn = false
+        AuthService.instance.jwtToken = ""
+        dismiss(animated: true){
+            self.logoutHud.hide()
+        }
+    }
+    
+    fileprivate func setupViews() {
+        view.addSubview(tableView)
+        view.addSubview(logoutHud)
+        
+        logoutHud.pin(to: view)
+        
+        tableView.pin(to: view)
+    }
+    
+    fileprivate func setupTableView() {
         tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(ProfileInfo.self, forCellReuseIdentifier: cellId)
         tableView.estimatedRowHeight = 234.667
         tableView.rowHeight = UITableView.automaticDimension
-        
-        setupViews()
     }
-    
-    private func setupViews() {
-        view.addSubview(tableView)
-        
-        tableView.pin(to: view)
-    }
-    
     
     
 

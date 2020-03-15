@@ -19,12 +19,14 @@ class LoginController: UIViewController {
     let emailTextField: InputText = {
         let tf = InputText(padding: 24, height: 50, placeholder: "Email")
         tf.keyboardType = .emailAddress
+        tf.text = "juric@gmail.com"
         return tf
     }()
     
     let passwordTextField: InputText = {
         let tf = InputText(padding: 24, height: 50, placeholder: "Password")
         tf.isSecureTextEntry = true
+        tf.text = "123456"
         return tf
     }()
     
@@ -63,14 +65,21 @@ class LoginController: UIViewController {
             loginHud.show()
             let parameters = ["email": emailText, "password": passwordText]
             
-            ApiService.instance.loginRequest(body: parameters) { (result) in
+            UserApiService.instance.loginRequest(body: parameters) { (result) in
                 switch result {
                 case .success(let response):
                     switch response.status {
                     case 200:
                         self.loginHud.hide()
-                        let homeController = HomeController()
-                        self.navigationController?.pushViewController(homeController, animated: true)
+                        AuthService.instance.isLoggedIn = true
+                        if let _id = response.data?._id, let jwtToken = response.token {
+                            AuthService.instance.userId = _id
+                            AuthService.instance.jwtToken = jwtToken
+
+                            let homeController = HomeController()
+                            homeController.modalPresentationStyle = .overFullScreen
+                            self.present(homeController, animated: true, completion: nil)
+                        }
                         
                     default:
                         self.loginHud.hide()

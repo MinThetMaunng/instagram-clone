@@ -37,6 +37,9 @@ class MessageController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     private func setupViews() {
         view.backgroundColor = .white
+        title = "Chat"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(handleBack))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(handleCompose))
         view.addSubview(tableView)
         
         tableView.delegate = self
@@ -46,6 +49,15 @@ class MessageController: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.pin(to: view)
         
         tableView.register(ChatBoxCell.self, forCellReuseIdentifier: cellId)
+    }
+    
+    @objc private func handleCompose() {
+        
+    }
+    
+    @objc private func handleBack() {
+        
+        navigationController?.popViewController(animated: true)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

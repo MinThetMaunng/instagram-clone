@@ -8,26 +8,9 @@
 
 import UIKit
 
-class SearchController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-    lazy var imagePicker: UIImagePickerController = {
-        let ip = UIImagePickerController()
-        
-        ip.delegate = self
-        ip.allowsEditing = true
-        ip.sourceType = .photoLibrary
-        ip.modalPresentationStyle = .currentContext
-        return ip
-    }()
+class SearchController: UIViewController {
     
     override func viewDidLoad() {
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
-        self.present(imagePicker, animated: false, completion: nil)
-    }
-    
-    override func viewWillLayoutSubviews() {
     }
 }

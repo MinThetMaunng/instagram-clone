@@ -11,8 +11,11 @@ import UIKit
 extension RegisterController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        let image = info[.editedImage] as? UIImage
-        profileImage.setImage(image, for: .normal)
+        if let image = info[.editedImage] as? UIImage {
+            profileImage.setImage(image, for: .normal)
+            chosenImage = image
+        }
+        
         dismiss(animated: true, completion: nil)
     }
     
@@ -22,6 +25,14 @@ extension RegisterController: UIImagePickerControllerDelegate, UINavigationContr
 }
 
 class RegisterController: UIViewController {
+    
+    var chosenImage: UIImage?
+    
+    lazy var registerHud: ModalBox = {
+        let mb = ModalBox()
+        mb.captionLabel.text = "SIGNNING UP"
+        return mb
+    }()
     
     let profileImage: UIButton = {
         let btn = UIButton()
@@ -51,7 +62,7 @@ class RegisterController: UIViewController {
     
     let userNameTextField: InputText = {
         let tf = InputText(padding: 24, height: 50, placeholder: "Username")
-        tf.autocapitalizationType = .words
+        tf.autocapitalizationType = .none
         return tf
     }()
     
@@ -67,9 +78,9 @@ class RegisterController: UIViewController {
         return tf
     }()
     
-    lazy var loginButton: CustomButton = {
+    lazy var signupButton: CustomButton = {
         let btn = CustomButton(title: "Sign Up")
-        btn.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(handleSignup), for: .touchUpInside)
         return btn
     }()
     
@@ -87,18 +98,47 @@ class RegisterController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    @objc private func handleLogin() {
-        let userNameText = userNameTextField.text
-        let emailText = emailTextField.text
-        let passwordText = passwordTextField.text
+    @objc private func handleSignup() {
+        let userNameText = userNameTextField.text ?? ""
+        let emailText = emailTextField.text ?? ""
+        let passwordText = passwordTextField.text ?? ""
         
         userNameText == "" ? userNameTextField.showErrorMessage() : userNameTextField.hideErrorMessage()
         emailText == "" ? emailTextField.showErrorMessage() : emailTextField.hideErrorMessage()
         passwordText == "" ? passwordTextField.showErrorMessage() : passwordTextField.hideErrorMessage()
+        
+        self.registerHud.show()
+        guard let profileImage = chosenImage else {
+            self.registerHud.hide()
+            return
+        }
+        
+        if userNameText != "", emailText != "", passwordText != ""{
+            let body: Parameters = ["username": userNameText, "email": emailText, "password": passwordText]
+            UserApiService.instance.signupRequest(parameters: body, image: profileImage) { (result) in
+                switch result {
+                case .success(let response):
+                    switch response.status {
+                    case 201:
+                        self.registerHud.hide()
+                        let homeController = HomeController()
+                        homeController.modalPresentationStyle = .overFullScreen
+                        self.present(homeController, animated: true, completion: nil)
+                        
+                    default:
+                        self.registerHud.hide()
+                    }
+                case .failure(let error):
+                    print("Error")
+                    print(error)
+                    
+                }
+            }
+        }
     }
     
     lazy var stackView: UIStackView = {
-        let sv = UIStackView(arrangedSubviews: [self.userNameTextField, self.emailTextField, self.passwordTextField, self.loginButton])
+        let sv = UIStackView(arrangedSubviews: [self.userNameTextField, self.emailTextField, self.passwordTextField, self.signupButton])
         sv.distribution = .equalSpacing
         sv.spacing = 20
         sv.axis = .vertical
@@ -121,13 +161,17 @@ class RegisterController: UIViewController {
         view.addSubview(stackView)
         view.addSubview(goToLoginButton)
         
+        
+        view.addSubview(registerHud)
+        registerHud.add(to: view)
+        
         stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50).isActive = true
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50).isActive = true
         stackView.heightAnchor.constraint(equalToConstant: 260).isActive = true
         stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         
-        loginButton.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
-        loginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        signupButton.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
+        signupButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
 
         profileImage.widthAnchor.constraint(equalToConstant: 150).isActive = true
         profileImage.heightAnchor.constraint(equalToConstant: 150).isActive = true
