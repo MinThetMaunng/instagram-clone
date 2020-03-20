@@ -48,8 +48,9 @@ class ProfileController: UIViewController {
         logoutHud.show()
         AuthService.instance.isLoggedIn = false
         AuthService.instance.jwtToken = ""
+
+        self.logoutHud.hide()
         dismiss(animated: true){
-            self.logoutHud.hide()
         }
     }
     

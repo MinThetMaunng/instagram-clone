@@ -99,7 +99,8 @@ class FeedController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! PostCell
-        cell.post = posts[indexPath.row]
+        
+        cell.post = self.posts[indexPath.row]
         return cell
     }
     

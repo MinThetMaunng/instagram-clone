@@ -20,6 +20,7 @@ class PostCell: UITableViewCell {
             if let imageUrl = post?.photo {
                 postImage.loadImageUsingUrl(string: "\(PHOTO_IMAGE_URL)\(imageUrl)")
             }
+            
             statusLabel.text = post?.status ?? ""
 
         }
@@ -45,6 +46,7 @@ class PostCell: UITableViewCell {
     
     let postImage: CacheImageView = {
         let iv = CacheImageView()
+        iv.image = UIImage(named: "loading")
         iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .lightGray
         iv.layer.masksToBounds = true
@@ -137,8 +139,8 @@ class PostCell: UITableViewCell {
         constraintWithVisualFormat(format: "H:|[v0]|", views: postImage)
         constraintWithVisualFormat(format: "H:|-16-[v0(90)]", views: stackView)
         constraintWithVisualFormat(format: "H:|-16-[v0]-16-|", views: statusLabel)
-        constraintWithVisualFormat(format: "V:|-16-[v0(40)]-12-[v1]-12-[v2(\(frame.size.width))]-12-[v3(30)]-10-|", views: userProfileImage, statusLabel, postImage, stackView)
-        constraintWithVisualFormat(format: "V:|-16-[v0(20)]-5-[v1(15)]-12-[v2]-12-[v3(\(frame.size.width))]-12-[v4(30)]-10-|", views: userNameLabel, postedTimeLabel, statusLabel, postImage, stackView)
+        constraintWithVisualFormat(format: "V:|-16-[v0(40)]-12-[v1]-12-[v2(\(frame.size.width+50))]-12-[v3(30)]-10-|", views: userProfileImage, statusLabel, postImage, stackView)
+        constraintWithVisualFormat(format: "V:|-16-[v0(20)]-5-[v1(15)]-12-[v2]-12-[v3(\(frame.size.width+50))]-12-[v4(30)]-10-|", views: userNameLabel, postedTimeLabel, statusLabel, postImage, stackView)
     }
     
     private func createObserver() {

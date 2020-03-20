@@ -53,8 +53,8 @@ class CacheImageView: UIImageView {
     var imageUrlString: String?
     
     func loadImageUsingUrl(string urlString: String) {
-        imageUrlString = urlString
         
+        imageUrlString = urlString
         guard let url = URL(string: urlString) else { return }
         
         // if image is already exist in cache
@@ -69,12 +69,15 @@ class CacheImageView: UIImageView {
                 return
             }
             
-            guard let imageData = data else { return }
+//            guard let imageData = data else { return }
             
             DispatchQueue.main.async {
-                let imageToCache = UIImage(data: imageData)
+                let imageToCache = UIImage(data: data!)
                 if self.imageUrlString == urlString {
-                    imageCache.setObject(imageToCache!, forKey: NSString(string: urlString))
+                    if imageToCache != nil {
+
+                        imageCache.setObject(imageToCache!, forKey: NSString(string: urlString))
+                    }
                 }
                 self.image = imageToCache
             }
@@ -83,3 +86,4 @@ class CacheImageView: UIImageView {
         
     }
 }
+

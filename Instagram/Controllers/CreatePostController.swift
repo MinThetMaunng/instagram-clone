@@ -44,6 +44,12 @@ class CreatePostController: UIViewController, UITextViewDelegate {
         }
     }
     
+    let hud: ModalBox = {
+        let mb = ModalBox()
+        mb.captionLabel.text = "POSTING"
+        return mb
+    }()
+    
     let backgroundView: UIView = {
         let v = UIView()
         v.backgroundColor = .white
@@ -94,6 +100,9 @@ class CreatePostController: UIViewController, UITextViewDelegate {
         backgroundView.addSubview(imagePickerButton)
         backgroundView.addSubview(textView)
         
+        view.addSubview(hud)
+        hud.add(to: view)
+        
         let statusBarHeight = UIApplication.shared.statusBarFrame.height 
         let topAnchorConstant = navigationController?.navigationBar.frame.height ?? 44
 
@@ -109,6 +118,7 @@ class CreatePostController: UIViewController, UITextViewDelegate {
         
         if let status = textView.text, let image = chosenImage, textView.textColor == .black {
             let parameters = ["user": AuthService.instance.userId, "status": status]
+            hud.show()
             PostApiService.instance.createPostRequest(body: parameters, image: image) { (result) in
                 switch result {
                 case .success(let response):
@@ -121,6 +131,7 @@ class CreatePostController: UIViewController, UITextViewDelegate {
                 case .failure(let error):
                     print(error)
                 }
+                self.hud.hide()
             }
 //            tabBarController?.selectedIndex = 0
 //            imagePickerButton.setImage(nil, for: .normal)
