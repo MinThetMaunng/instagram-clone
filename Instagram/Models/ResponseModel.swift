@@ -37,6 +37,37 @@ struct GetAllPostResponse: Codable {
     var total: Int?
 }
 
+struct GetUserProfileResponse: Codable {
+    var status: Int
+    var msg: String?
+    var data: UserProfileData?
+    var total: Int?
+}
+
+struct GetUserPostsResponse: Codable {
+    var status: Int
+    var msg: String?
+    var data: [UserPost]?
+    var total: Int?
+}
+
+
+
+
+struct UserPost: Codable {
+    var _id: String
+    var status: String?
+    var photo: String
+    var updatedAt: String?
+}
+
+struct UserProfileData: Codable {
+    var noOfFollowers: Int
+    var noOfFollowings: Int
+    var noOfPosts: Int
+    var user: User?
+}
+
 struct PostErrorMessage: Codable {
     var user: [String]?
     var status: [String]?

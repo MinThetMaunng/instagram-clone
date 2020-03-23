@@ -8,21 +8,43 @@
 
 import UIKit
 
-class ProfileInfo: UITableViewCell {
+class ProfileInfo: UICollectionViewCell {
     
-    var profile: Profile? {
+    var profile: UserProfileData? {
         didSet {
-            if let profileImageString = profile?.profileImage {
-                profileImage.image = UIImage(named: profileImageString)
+            if let username = profile?.user?.username {
+                nameLabel.text = "\(username)"
             }
-            
+            if let profileImageString = profile?.user?.profileImage {
+                profileImage.loadImageUsingUrl(string: "\(PROFILE_IMAGE_URL)\(profileImageString)")
+            }
+            if let noOfFllowers = profile?.noOfFollowers {
+
+                let attributedText = NSMutableAttributedString(string: "\(noOfFllowers)", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 20, weight: .semibold), NSAttributedString.Key.foregroundColor: UIColor.black])
+                attributedText.append(NSAttributedString(string: "\nFollowers", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14, weight: .regular)]))
+                followerLabel.attributedText = attributedText
+                
+            }
+            if let noOfFollowings = profile?.noOfFollowings {
+                
+                let attributedText = NSMutableAttributedString(string: "\(noOfFollowings)", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 20, weight: .semibold), NSAttributedString.Key.foregroundColor: UIColor.black])
+                attributedText.append(NSAttributedString(string: "\nFollowings", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14, weight: .regular)]))
+                followingLabel.attributedText = attributedText
+                
+            }
+            if let noOfPosts = profile?.noOfPosts {
+                let attributedText = NSMutableAttributedString(string: "\(noOfPosts)", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 20, weight: .semibold), NSAttributedString.Key.foregroundColor: UIColor.black])
+                attributedText.append(NSAttributedString(string: "\nPosts", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14, weight: .regular)]))
+                postLabel.attributedText = attributedText
+            }
             
         }
     }
     
-    let profileImage: UIImageView = {
-        let iv = UIImageView()
-        iv.image = UIImage(named: "juric_daniel")
+    let profileImage: CacheImageView = {
+        let iv = CacheImageView()
+//        iv.image = UIImage(named: "juric_daniel")
+        iv.backgroundColor = .lightGray
         iv.contentMode = .scaleAspectFit
         iv.layer.cornerRadius = 40
         iv.clipsToBounds = true
@@ -31,7 +53,7 @@ class ProfileInfo: UITableViewCell {
     
     let nameLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Juric Daniel"
+        lbl.text = ""
         lbl.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         lbl.textColor = .black
         lbl.backgroundColor = .clear
@@ -59,6 +81,7 @@ class ProfileInfo: UITableViewCell {
         v.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.3965377391)
         return v
     }()
+    
     private func createLabel(number: Int, caption: String) -> UILabel {
         let lbl = UILabel()
         lbl.textColor = .darkGray
@@ -71,9 +94,9 @@ class ProfileInfo: UITableViewCell {
         return lbl
     }
     
-    lazy var postLabel: UILabel = createLabel(number: 16, caption: "Posts")
-    lazy var followerLabel: UILabel = createLabel(number: 166, caption: "Followers")
-    lazy var followingLabel: UILabel = createLabel(number: 604, caption: "Following")
+    lazy var postLabel: UILabel = createLabel(number: 0, caption: "Posts")
+    lazy var followerLabel: UILabel = createLabel(number: 0, caption: "Followers")
+    lazy var followingLabel: UILabel = createLabel(number: 0, caption: "Following")
     
     let feedViewButton: UIButton = {
         let btn = UIButton(type: .system)
@@ -109,8 +132,8 @@ class ProfileInfo: UITableViewCell {
     }()
     
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setupViews()
     }
     

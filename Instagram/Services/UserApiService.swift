@@ -11,6 +11,21 @@ import UIKit
 class UserApiService {
     static let instance = UserApiService()
     
+    func getUserProfile(completion: @escaping (Result<GetUserProfileResponse, Error>) -> () ) {
+        guard let url = URL(string: "\(GET_PROFILE)\(AuthService.instance.userId)") else { return }
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            DispatchQueue.main.async {
+                guard let data = data else { return }
+                do {
+                    let jsonResult = try JSONDecoder().decode(GetUserProfileResponse.self, from: data)
+                    completion(.success(jsonResult))
+                } catch(let err) {
+                    completion(.failure(err))
+                }
+            }
+        }.resume()
+    }
+    
     func loginRequest(body: Parameters, completion: @escaping (Result<LoginResponse , Error>) -> ()) {
         guard let url = URL(string: LOGIN_URL) else { return }
         var request = URLRequest(url: url)

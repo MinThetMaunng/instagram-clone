@@ -41,6 +41,8 @@
 		D9F2B58F2404D6DB008B0B8A /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9F2B58E2404D6DB008B0B8A /* NotificationController.swift */; };
 		D9F2B5912404D706008B0B8A /* NotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9F2B5902404D706008B0B8A /* NotificationCell.swift */; };
 		D9F2B5932404D728008B0B8A /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9F2B5922404D728008B0B8A /* ProfileController.swift */; };
+		D9FA37E02428BFCA0034C68F /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9FA37DF2428BFCA0034C68F /* ProfileCell.swift */; };
+		D9FA37E22428D3430034C68F /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9FA37E12428D3430034C68F /* PhotoCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -97,6 +99,8 @@
 		D9F2B58E2404D6DB008B0B8A /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
 		D9F2B5902404D706008B0B8A /* NotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCell.swift; sourceTree = "<group>"; };
 		D9F2B5922404D728008B0B8A /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
+		D9FA37DF2428BFCA0034C68F /* ProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCell.swift; sourceTree = "<group>"; };
+		D9FA37E12428D3430034C68F /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,6 +203,8 @@
 				D9C5451E2408B675004A255A /* ProfileInfoView.swift */,
 				D9421EAC240A2058003FCEE2 /* CustomButton.swift */,
 				D9220AF62410C73900219323 /* ModalBox.swift */,
+				D9FA37DF2428BFCA0034C68F /* ProfileCell.swift */,
+				D9FA37E12428D3430034C68F /* PhotoCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -355,7 +361,9 @@
 				D9F2B5872404D654008B0B8A /* MessageController.swift in Sources */,
 				D9C545212408BC4A004A255A /* Profile.swift in Sources */,
 				D90AC5BB241D2A89009267F6 /* UserApiService.swift in Sources */,
+				D9FA37E02428BFCA0034C68F /* ProfileCell.swift in Sources */,
 				D9F2B5812404D5D8008B0B8A /* PostCell.swift in Sources */,
+				D9FA37E22428D3430034C68F /* PhotoCell.swift in Sources */,
 				D9F2B5892404D66D008B0B8A /* FeedController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

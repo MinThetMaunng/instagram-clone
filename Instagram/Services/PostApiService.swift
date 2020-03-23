@@ -11,6 +11,21 @@ import UIKit
 class PostApiService {
     static let instance = PostApiService()
     
+    func getPostsByUser(userId: String, limit: Int, skip: Int, completion: @escaping (Result<GetUserPostsResponse,Error>) ->() ) {
+        guard let url = URL(string: "\(GET_ALL_POST_URL)/\(userId)?limit=\(limit)&skip=\(skip)") else { return }
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            DispatchQueue.main.async {
+                guard let data = data else { return }
+                do {
+                    let jsonData = try JSONDecoder().decode(GetUserPostsResponse.self, from: data)
+                    completion(.success(jsonData))
+                } catch(let err) {
+                    completion(.failure(err))
+                }
+            }
+        }.resume()
+    }
+    
     func getPostsRequest(limit: Int, skip: Int, completion: @escaping (Result<GetAllPostResponse, Error>) -> ()) {
         guard let url = URL(string: "\(GET_ALL_POST_URL)?sort=-createdAt&limit=\(limit)&skip=\(skip)") else { return }
         var request = URLRequest(url: url)

@@ -10,9 +10,33 @@ import UIKit
 
 class ProfileController: UIViewController {
     
-    let cellId = "cellId"
-    let tableView = UITableView()
-//    let collectionView = UICollectionView()
+    
+    let ProfileInfoCellId = "ProfileInfo"
+    let PhotoCellId = "PhotoCellId"
+    var multiplier = 0
+    var user: UserProfileData?
+    var posts: [UserPost]?
+    
+    let refreshControl: UIRefreshControl = {
+        let rc = UIRefreshControl()
+        rc.addTarget(self, action: #selector(fetchProfileData), for: .valueChanged)
+        return rc
+    }()
+    
+    @objc private func refreshScreen() {
+        print("Refreshing")
+    }
+    
+    lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = 0
+        
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.backgroundColor = .white
+        cv.refreshControl = self.refreshControl
+        return cv
+    }()
     
     let logoutHud: ModalBox = {
         let mb = ModalBox()
@@ -32,16 +56,55 @@ class ProfileController: UIViewController {
     }()
 
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .white
-        
+    fileprivate func setupNavigation() {
         navigationItem.titleView = titleView
         let logoutButton = UIBarButtonItem(title: "Log Out", style: .plain, target: self, action: #selector(logout))
         navigationItem.rightBarButtonItems = [logoutButton]
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        setupTableView()
+        setupNavigation()
+        setupCollectionView()
         setupViews()
+        fetchProfileData()
+    }
+    
+    @objc fileprivate func fetchProfileData() {
+        self.refreshControl.beginRefreshing()
+        
+        UserApiService.instance.getUserProfile { (result) in
+            switch result {
+            case .success(let data):
+                self.user = data.data
+                self.collectionView.reloadData()
+            case .failure(let err):
+                print(err)
+            }
+        }
+        
+        PostApiService.instance.getPostsByUser(userId: AuthService.instance.userId, limit: 9, skip: 0) { (result) in
+            switch result {
+            case .success(let data):
+                self.posts = data.data
+                self.refreshControl.endRefreshing()
+                self.collectionView.reloadData()
+            case .failure(let err):
+                print(err)
+                
+                self.refreshControl.endRefreshing()
+            }
+        }
+        
+    }
+    
+    fileprivate func setupCollectionView() {
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(ProfileInfo.self, forCellWithReuseIdentifier: ProfileInfoCellId)
+        collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCellId)
+        
     }
     
     @objc private func logout(){
@@ -55,37 +118,74 @@ class ProfileController: UIViewController {
     }
     
     fileprivate func setupViews() {
-        view.addSubview(tableView)
+        view.backgroundColor = .white
+        view.addSubview(collectionView)
         view.addSubview(logoutHud)
         
         logoutHud.pin(to: view)
-        
-        tableView.pin(to: view)
+        collectionView.pin(to: view)
     }
-    
-    fileprivate func setupTableView() {
-        tableView.separatorStyle = .none
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(ProfileInfo.self, forCellReuseIdentifier: cellId)
-        tableView.estimatedRowHeight = 234.667
-        tableView.rowHeight = UITableView.automaticDimension
-    }
-    
     
 
 }
 
 
-extension ProfileController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+
+extension ProfileController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout  {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        let total = self.posts?.count ?? 0
+        if total == 0 {
+            return 1
+        }
+        return Int(ceil(Double(Float(total) / 3))) + 1
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ProfileInfo
-        return cell
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if section == 0 {
+            return 1
+        }
+        let total = self.posts?.count ?? 0
+        let noOfItems = total - (section * 3)
+        if noOfItems > 0 {
+            return 3
+        }
+        return 3 + noOfItems
     }
     
+   
     
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        if indexPath.section == 0 {
+
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileInfoCellId, for: indexPath) as! ProfileInfo
+            cell.profile = user
+            return cell
+        } else {
+
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCellId, for: indexPath) as! PhotoCell
+            
+            if multiplier < self.posts?.count ?? 0 {
+                cell.data = self.posts?[multiplier]
+            }
+            self.multiplier += 1
+            return cell
+        }
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let viewWidth = view.frame.size.width
+        if indexPath.section == 0 {
+            return CGSize(width: viewWidth, height: 236.3)
+        }
+        return CGSize(width: (viewWidth / 3) - 0.5, height: (viewWidth / 3))
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+    }
+       
+       
 }
