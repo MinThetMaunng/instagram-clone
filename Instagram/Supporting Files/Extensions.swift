@@ -59,13 +59,19 @@ class CacheImageView: UIImageView {
         
         // if image is already exist in cache
         if let imageFromCache = imageCache.object(forKey: NSString(string: urlString)){
-            image = imageFromCache
+            self.image = imageFromCache
+
+            print("URL________________")
+            print(urlString)
+            print("Cache")
             return
         }
         
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil {
+                print("++++++++++++++++++++++++++++")
                 print("Requesting image from server failed: \(String(describing: error))")
+                print("++++++++++++++++++++++++++++")
                 return
             }
             
@@ -76,9 +82,13 @@ class CacheImageView: UIImageView {
                 if self.imageUrlString == urlString {
                     if imageToCache != nil {
 
+                        print("URL________________")
+                        print(urlString)
+                        print("Not cache")
                         imageCache.setObject(imageToCache!, forKey: NSString(string: urlString))
                     }
                 }
+//                if let image = imageCache
                 self.image = imageToCache
             }
         }.resume()

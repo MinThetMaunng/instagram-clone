@@ -124,7 +124,7 @@ class CreatePostController: UIViewController, UITextViewDelegate {
                 case .success(let response):
                     self.textView.text = nil
                     self.imagePickerButton.setImage(nil, for: .normal)
-                    self.tabBarController?.selectedIndex = 0
+                    self.tabBarController?.selectedIndex = 4
                     
                 case .failure(let error):
                     print(error)

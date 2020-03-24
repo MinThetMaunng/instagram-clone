@@ -62,6 +62,11 @@ class ProfileController: UIViewController {
         navigationItem.rightBarButtonItems = [logoutButton]
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        fetchProfileData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -73,21 +78,29 @@ class ProfileController: UIViewController {
     
     @objc fileprivate func fetchProfileData() {
         self.refreshControl.beginRefreshing()
-        
+        self.multiplier = 0
         UserApiService.instance.getUserProfile { (result) in
+            
+            print("-------Fetching Profile------")
             switch result {
             case .success(let data):
                 self.user = data.data
+                print(self.user)
+                print("-------Fetching Profile Ended------")
                 self.collectionView.reloadData()
             case .failure(let err):
                 print(err)
             }
         }
         
-        PostApiService.instance.getPostsByUser(userId: AuthService.instance.userId, limit: 9, skip: 0) { (result) in
+        PostApiService.instance.getPostsByUser(userId: AuthService.instance.userId, limit: 15, skip: 0) { (result) in
+            print("-------Fetching Posts------")
             switch result {
             case .success(let data):
                 self.posts = data.data
+                
+                print(self.posts)
+                print("-------Fetching Posts Ended------")
                 self.refreshControl.endRefreshing()
                 self.collectionView.reloadData()
             case .failure(let err):
@@ -162,17 +175,23 @@ extension ProfileController: UICollectionViewDelegate, UICollectionViewDataSourc
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileInfoCellId, for: indexPath) as! ProfileInfo
             cell.profile = user
             return cell
-        } else {
-
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCellId, for: indexPath) as! PhotoCell
-            
-            if multiplier < self.posts?.count ?? 0 {
-                cell.data = self.posts?[multiplier]
-            }
-            self.multiplier += 1
-            return cell
         }
+
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCellId, for: indexPath) as! PhotoCell
         
+//        if multiplier < self.posts?.count ?? 0 {
+//            cell.data = self.posts?[multiplier]
+//            self.multiplier += 1
+//        }
+//        print("multiplier")
+//        print(self.multiplier)
+        cell.data = self.posts?[calculateIndexOfArray(indexPath: indexPath)]
+        return cell
+        
+    }
+    
+    private func calculateIndexOfArray(indexPath: IndexPath) -> Int {
+        return ( (indexPath.section - 1) * 3) + indexPath.item
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

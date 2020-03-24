@@ -14,7 +14,7 @@ class PhotoCell: UICollectionViewCell {
         didSet {
             if let photoUrl = data?.photo {
                 photoView.loadImageUsingUrl(string: "\(PHOTO_IMAGE_URL)\(photoUrl)")
-                self.layoutIfNeeded()
+//                self.layoutIfNeeded()
 //                isHidden = false
             }
         }
