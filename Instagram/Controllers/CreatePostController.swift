@@ -121,7 +121,7 @@ class CreatePostController: UIViewController, UITextViewDelegate {
             hud.show()
             PostApiService.instance.createPostRequest(body: parameters, image: image) { (result) in
                 switch result {
-                case .success(let response):
+                case .success(let _):
                     self.textView.text = nil
                     self.imagePickerButton.setImage(nil, for: .normal)
                     self.tabBarController?.selectedIndex = 4

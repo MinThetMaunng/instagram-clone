@@ -55,15 +55,11 @@ class CacheImageView: UIImageView {
     func loadImageUsingUrl(string urlString: String) {
         
         imageUrlString = urlString
-        guard let url = URL(string: urlString) else { return }
+        guard let url = URL(string: urlString) else { return  }
         
         // if image is already exist in cache
         if let imageFromCache = imageCache.object(forKey: NSString(string: urlString)){
             self.image = imageFromCache
-
-            print("URL________________")
-            print(urlString)
-            print("Cache")
             return
         }
         
@@ -75,24 +71,17 @@ class CacheImageView: UIImageView {
                 return
             }
             
-//            guard let imageData = data else { return }
-            
             DispatchQueue.main.async {
                 let imageToCache = UIImage(data: data!)
                 if self.imageUrlString == urlString {
                     if imageToCache != nil {
-
-                        print("URL________________")
-                        print(urlString)
-                        print("Not cache")
                         imageCache.setObject(imageToCache!, forKey: NSString(string: urlString))
                     }
                 }
-//                if let image = imageCache
                 self.image = imageToCache
             }
         }.resume()
-        
+
         
     }
 }

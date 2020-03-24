@@ -25,7 +25,7 @@ class PhotoCell: UICollectionViewCell {
 //        iv.contentMode = .scaleAspectFit
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
-        iv.backgroundColor = .lightGray
+        iv.backgroundColor = #colorLiteral(red: 0.937254902, green: 0.937254902, blue: 0.937254902, alpha: 1)
         return iv
     }()
     
@@ -39,7 +39,6 @@ class PhotoCell: UICollectionViewCell {
     }
     
     private func setupViews() {
-//        isHidden = true
         addSubview(photoView)
         
         constraintWithVisualFormat(format: "H:|[v0]|", views: photoView)

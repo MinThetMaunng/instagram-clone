@@ -36,7 +36,7 @@ class HomeController: UITabBarController, UIImagePickerControllerDelegate, UINav
         tabBar.tintColor = #colorLiteral(red: 0.1725490196, green: 0.1725490196, blue: 0.1725490196, alpha: 1)
         
         let feedController = createNavigationController(viewController: FeedController(), title: "Feeds", image: "home_icon", selectedImage: "selected_home_icon")
-        let searchController = createNavigationController(viewController: UIViewController(), title: "Search", image: "search_icon", selectedImage: "selected_search_icon")
+        let searchController = createNavigationController(viewController: SearchController(), title: "Search", image: "search_icon", selectedImage: "selected_search_icon")
         let createPostController = createNavigationController(viewController: CreatePostController(), title: "Create Post", image: "plus_icon", selectedImage: "plus_icon")
         let heartController = createNavigationController(viewController: NotificationController(), title: "Profile", image: "love_icon", selectedImage: "selected_love_icon")
         let profileController = createNavigationController(viewController: ProfileController(), title: "Profile", image: "profile_icon", selectedImage: "selected_profile_icon")

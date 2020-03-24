@@ -81,12 +81,9 @@ class ProfileController: UIViewController {
         self.multiplier = 0
         UserApiService.instance.getUserProfile { (result) in
             
-            print("-------Fetching Profile------")
             switch result {
             case .success(let data):
                 self.user = data.data
-                print(self.user)
-                print("-------Fetching Profile Ended------")
                 self.collectionView.reloadData()
             case .failure(let err):
                 print(err)
@@ -94,18 +91,13 @@ class ProfileController: UIViewController {
         }
         
         PostApiService.instance.getPostsByUser(userId: AuthService.instance.userId, limit: 15, skip: 0) { (result) in
-            print("-------Fetching Posts------")
             switch result {
             case .success(let data):
                 self.posts = data.data
-                
-                print(self.posts)
-                print("-------Fetching Posts Ended------")
                 self.refreshControl.endRefreshing()
                 self.collectionView.reloadData()
             case .failure(let err):
                 print(err)
-                
                 self.refreshControl.endRefreshing()
             }
         }
@@ -171,20 +163,13 @@ extension ProfileController: UICollectionViewDelegate, UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.section == 0 {
-
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileInfoCellId, for: indexPath) as! ProfileInfo
             cell.profile = user
             return cell
         }
 
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCellId, for: indexPath) as! PhotoCell
-        
-//        if multiplier < self.posts?.count ?? 0 {
-//            cell.data = self.posts?[multiplier]
-//            self.multiplier += 1
-//        }
-//        print("multiplier")
-//        print(self.multiplier)
+        cell.photoView.image = nil
         cell.data = self.posts?[calculateIndexOfArray(indexPath: indexPath)]
         return cell
         

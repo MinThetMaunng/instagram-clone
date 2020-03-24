@@ -27,14 +27,14 @@ class FeedController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.getAllPosts()
-        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupNavigationBar()
         setupViews()
         getAllPosts()
-//        setDummyPosts()
     }
     
     private func getAllPosts() {
@@ -55,8 +55,7 @@ class FeedController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     
-    fileprivate func setupViews() {
-        view.backgroundColor = .white
+    fileprivate func setupNavigationBar() {
         navigationItem.title = "Instagram"
         
         let arrowButton = UIBarButtonItem(image: UIImage(named: "share"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(goToMessages))
@@ -66,6 +65,10 @@ class FeedController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         navigationItem.leftBarButtonItems = [cameraButton]
         navigationItem.rightBarButtonItems = [arrowButton]
+    }
+    
+    fileprivate func setupViews() {
+        view.backgroundColor = .white
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -86,12 +89,6 @@ class FeedController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.tabBarController?.selectedIndex = 2
     }
     
-    private func setDummyPosts() {
-//        let firstPost = Post(userName: "Juric Daniel", profileImage: "juric_daniel", postImage: "gigi1", status: "I am Juric Daniel.", createdDate: "3rd Feb 2020")
-//        let secondPost =  Post(userName: "Juric Daniel", profileImage: "juric_daniel", postImage: "gigi1", status: "I am Juric Daniel. I am currently working as a freelance iOS developer.", createdDate: "3rd Feb 2020")
-//
-//        posts = [ firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost, firstPost, secondPost]
-    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return posts.count
