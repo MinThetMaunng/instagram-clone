@@ -113,12 +113,17 @@ class ProfileController: UIViewController {
     }
     
     @objc private func logout(){
-        logoutHud.show()
+//        logoutHud.show()
         AuthService.instance.isLoggedIn = false
         AuthService.instance.jwtToken = ""
-
-        self.logoutHud.hide()
-        dismiss(animated: true){
+        do {
+         
+//            self.logoutHud.hide()
+            dismiss(animated: true){
+            }
+        } catch(let err) {
+            print("ERROR LOGGING OUT")
+            print(err.localizedDescription)
         }
     }
     
@@ -169,7 +174,7 @@ extension ProfileController: UICollectionViewDelegate, UICollectionViewDataSourc
         }
 
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCellId, for: indexPath) as! PhotoCell
-        cell.photoView.image = nil
+        cell.photoView.image = UIImage(named: "gray")
         cell.data = self.posts?[calculateIndexOfArray(indexPath: indexPath)]
         return cell
         

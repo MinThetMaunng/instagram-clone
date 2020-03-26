@@ -46,9 +46,9 @@ class PostCell: UITableViewCell {
     
     let postImage: CacheImageView = {
         let iv = CacheImageView()
-        iv.image = UIImage(named: "loading")
+        iv.image = UIImage(named: "gray")
         iv.contentMode = .scaleAspectFill
-        iv.backgroundColor = .lightGray
+        iv.backgroundColor = #colorLiteral(red: 0.937254902, green: 0.937254902, blue: 0.937254902, alpha: 1)
         iv.layer.masksToBounds = true
         return iv
     }()

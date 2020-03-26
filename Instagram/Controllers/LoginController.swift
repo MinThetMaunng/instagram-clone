@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import ImageIO
 
 class LoginController: UIViewController {
     

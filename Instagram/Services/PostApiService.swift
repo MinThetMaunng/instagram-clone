@@ -11,9 +11,12 @@ import UIKit
 class PostApiService {
     static let instance = PostApiService()
     
-    func getPostsByUser(userId: String, limit: Int, skip: Int, completion: @escaping (Result<GetUserPostsResponse,Error>) ->() ) {
+    func getPostsByUser(userId: String, limit: Int? = 0, skip: Int? = 0, completion: @escaping (Result<GetUserPostsResponse,Error>) ->() ) {
         guard let url = URL(string: "\(GET_ALL_POST_URL)/\(userId)?limit=\(limit)&skip=\(skip)") else { return }
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
+        var request = URLRequest(url: url)
+        request.setValue(AuthService.instance.jwtToken, forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
             DispatchQueue.main.async {
                 guard let data = data else { return }
                 do {
@@ -29,7 +32,8 @@ class PostApiService {
     func getPostsRequest(limit: Int, skip: Int, completion: @escaping (Result<GetAllPostResponse, Error>) -> ()) {
         guard let url = URL(string: "\(GET_ALL_POST_URL)?sort=-createdAt&limit=\(limit)&skip=\(skip)") else { return }
         var request = URLRequest(url: url)
-        request.setValue("Authorization", forHTTPHeaderField: "\(AuthService.instance.jwtToken)")
+        request.setValue(AuthService.instance.jwtToken, forHTTPHeaderField: "Authorization")
+        
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             DispatchQueue.main.async {
                 guard let data = data else { return }
@@ -49,6 +53,7 @@ class PostApiService {
         guard let url = URL(string: CREATE_POST_URL) else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
+        request.setValue(AuthService.instance.jwtToken, forHTTPHeaderField: "Authorization")
         
         let boundary = ApiService.instance.generateBoundary()
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")

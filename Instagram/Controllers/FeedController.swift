@@ -20,10 +20,6 @@ class FeedController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return rc
     }()
     
-    @objc private func refreshData() {
-        print("Refreshing")
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.getAllPosts()
@@ -35,6 +31,11 @@ class FeedController: UIViewController, UITableViewDelegate, UITableViewDataSour
         setupNavigationBar()
         setupViews()
         getAllPosts()
+    }
+    
+    
+    @objc private func refreshData() {
+        print("Refreshing")
     }
     
     private func getAllPosts() {
@@ -96,7 +97,7 @@ class FeedController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! PostCell
-        
+        cell.postImage.image = UIImage(named: "gray")
         cell.post = self.posts[indexPath.row]
         return cell
     }

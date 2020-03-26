@@ -19,6 +19,7 @@ let CHANGE_TO_LIGHT = Notification.Name("CHANGE_TO_LIGHT")
 //let BASE_URL = "http://192.168.0.106:3000"
 let BASE_URL = "https://instagramnode.herokuapp.com"
 
+let GET_All_USERS = "\(BASE_URL)/users"
 let GET_PROFILE = "\(BASE_URL)/users/"
 let LOGIN_URL = "\(BASE_URL)/users/login"
 let SIGNUP_URL = "\(BASE_URL)/users/signup"

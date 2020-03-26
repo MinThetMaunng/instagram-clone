@@ -12,6 +12,7 @@ import UIKit
 class SearchController: UIViewController {
     
     let cellId = "cellId"
+    var users: [User]?
     
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -23,6 +24,12 @@ class SearchController: UIViewController {
         return cv
     }()
     
+    let refreshControl: UIRefreshControl = {
+        let rc = UIRefreshControl()
+        rc.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        return rc
+    }()
+    
     lazy var searchBar: UISearchBar = {
         let sb = UISearchBar(frame: .zero)
         sb.delegate = self
@@ -32,15 +39,19 @@ class SearchController: UIViewController {
         return sb
     }()
     
+    @objc fileprivate func handleRefresh() {
+        
+    }
+    
     fileprivate func setupNavigationBar() {
         navigationItem.titleView = self.searchBar
     }
     
     fileprivate func setupDelegatesAndDataSource() {
-        
+        collectionView.refreshControl = refreshControl
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(UserCell.self, forCellWithReuseIdentifier: cellId)
     }
     
     fileprivate func setupViews() {
@@ -54,14 +65,43 @@ class SearchController: UIViewController {
         setupNavigationBar()
         setupDelegatesAndDataSource()
         setupViews()
+        fetchData()
     }
+    
+    private func fetchData() {
+        
+    }
+
 }
+
 
 extension SearchController: UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
+        self.users = []
+        self.collectionView.reloadData()
         self.navigationController?.navigationBar.endEditing(true)
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == "" {
+            self.users = []
+            self.collectionView.reloadData()
+            return
+        }
+        self.collectionView.refreshControl?.beginRefreshing()
+        UserApiService.instance.getUsers(limit: 12, skip: 0, username: searchText) { (result) in
+            switch result {
+            case .success(let data):
+                self.users = data.data
+                self.collectionView.refreshControl?.endRefreshing()
+                self.collectionView.reloadData()
+            case .failure(let err):
+                print("Error")
+                print(err.localizedDescription)
+            }
+        }
     }
     
 }
@@ -73,16 +113,18 @@ extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 22
+        return users?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserCell
+        cell.profileImage.image = UIImage(named: "gray")
+        cell.userData = self.users?[indexPath.section]
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.size.width, height: 50)
+        return CGSize(width: view.frame.size.width, height: 82)
     }
     
 }

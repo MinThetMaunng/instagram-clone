@@ -11,9 +11,30 @@ import UIKit
 class UserApiService {
     static let instance = UserApiService()
     
+    func getUsers(limit: Int? = 0, skip: Int? = 0, username: String = "", completion:@escaping (Result<GetUsersResponse, Error>) -> ()) {
+        guard let url = URL(string: "\(GET_All_USERS)?limit=\(limit)&skip=\(skip)&username=\(username)") else { return }
+        var request = URLRequest(url: url)
+        request.setValue(AuthService.instance.jwtToken, forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            DispatchQueue.main.async {
+                guard let data = data else { return }
+                do {
+                    let jsonResult = try JSONDecoder().decode(GetUsersResponse.self, from: data)
+                    completion(.success(jsonResult))
+                } catch(let err) {
+                    completion(.failure(err))
+                }
+            }
+        }.resume()
+    }
+    
     func getUserProfile(completion: @escaping (Result<GetUserProfileResponse, Error>) -> () ) {
         guard let url = URL(string: "\(GET_PROFILE)\(AuthService.instance.userId)") else { return }
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
+        var request = URLRequest(url: url)
+        request.setValue(AuthService.instance.jwtToken, forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
             DispatchQueue.main.async {
                 guard let data = data else { return }
                 do {

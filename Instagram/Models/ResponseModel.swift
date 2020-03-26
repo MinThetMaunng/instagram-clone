@@ -51,6 +51,14 @@ struct GetUserPostsResponse: Codable {
     var total: Int?
 }
 
+struct GetUsersResponse: Codable {
+    var status: Int
+    var msg: String?
+    var error: [String:String]?
+    var total: Int?
+    var data: [User]?
+}
+
 
 
 
