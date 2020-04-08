@@ -16,8 +16,8 @@ let secondaryColor = #colorLiteral(red: 0.1137254902, green: 0.1490196078, blue:
 let CHANGE_TO_DARK = Notification.Name("CHANGE_TO_DARK")
 let CHANGE_TO_LIGHT = Notification.Name("CHANGE_TO_LIGHT")
 
-//let BASE_URL = "http://192.168.0.106:3000"
-let BASE_URL = "https://instagramnode.herokuapp.com"
+let BASE_URL = "http://172.20.10.11:3000"
+//let BASE_URL = "https://instagramnode.herokuapp.com"
 
 let GET_All_USERS = "\(BASE_URL)/users"
 let GET_PROFILE = "\(BASE_URL)/users/"
@@ -28,6 +28,8 @@ let IMAGE_UPLOAD_URL = "\(BASE_URL)/images/upload"
 let GET_ALL_POST_URL = "\(BASE_URL)/posts"
 let CREATE_POST_URL = "\(BASE_URL)/posts"
 
+let FOLLOW_OR_UNFOLLOW_URL = "\(BASE_URL)/follows"
+
 let PROFILE_IMAGE_URL = "\(BASE_URL)/profileimage/"
 let PHOTO_IMAGE_URL = "\(BASE_URL)/photos/"
 
@@ -36,3 +38,16 @@ enum UserDefaultsKey : String {
     case JWT_TOKEN = "jwtToken"
     case IS_LOGGED_IN = "isLoggedIn"
 }
+
+enum SocketEvents : String {
+    case CONNECTION = "connection"
+    case RETRIEVE_CHATBOXES = "retrieveChatboxes"
+    case SEND_CHATBOXES = "sendChatboxes"
+    case CREATE_CHAT_BOX = "createChatboxes"
+
+    case RETRIEVE_MESSAGES = "retrieveMessages"
+    case SEND_MESSAGES = "sendMessages"
+}
+
+
+let NOTI_BACK_TO_FOREGROUND = Notification.Name("backToForeground")

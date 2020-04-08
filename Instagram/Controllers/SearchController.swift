@@ -59,6 +59,11 @@ class SearchController: UIViewController {
         collectionView.pin(to: view)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = false
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -121,6 +126,18 @@ extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource
         cell.profileImage.image = UIImage(named: "gray")
         cell.userData = self.users?[indexPath.section]
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let profileViewController = ProfileController()
+        if self.users?[indexPath.section]._id == AuthService.instance.userId {
+            tabBarController?.selectedIndex = 4
+            return
+        }
+        profileViewController.userId = self.users?[indexPath.section]._id
+        profileViewController.modalPresentationStyle = .fullScreen
+        profileViewController.tabBarController?.tabBar.isHidden = true
+        navigationController?.pushViewController(profileViewController, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

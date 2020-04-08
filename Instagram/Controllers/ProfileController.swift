@@ -10,12 +10,22 @@ import UIKit
 
 class ProfileController: UIViewController {
     
-    
-    let ProfileInfoCellId = "ProfileInfo"
+    let ProfileInfoCellId = "ProfileInfoCellId"
+    let FriendProfileInfoCellId = "FriendProfileInfoCellId"
     let PhotoCellId = "PhotoCellId"
-    var multiplier = 0
-    var user: UserProfileData?
+    
+    var userId: String?
+    var user: UserProfileData? {
+        didSet {
+            if let username = self.user?.user?.username {
+
+//                titleView.text = username
+                navigationItem.title = username
+            }
+        }
+    }
     var posts: [UserPost]?
+    var followStatus: Bool?
     
     let refreshControl: UIRefreshControl = {
         let rc = UIRefreshControl()
@@ -35,6 +45,7 @@ class ProfileController: UIViewController {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .white
         cv.refreshControl = self.refreshControl
+        cv.allowsSelection = false
         return cv
     }()
     
@@ -49,7 +60,7 @@ class ProfileController: UIViewController {
         lbl.frame = CGRect(x: self.view.frame.width - 30, y: 10, width: 180, height: 40)
         lbl.textAlignment = .center
         lbl.textColor = .black
-        lbl.text = "juric_daniel"
+        lbl.text = ""
         lbl.backgroundColor = .clear
         lbl.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         return lbl
@@ -57,7 +68,6 @@ class ProfileController: UIViewController {
 
     
     fileprivate func setupNavigation() {
-        navigationItem.titleView = titleView
         let logoutButton = UIBarButtonItem(title: "Log Out", style: .plain, target: self, action: #selector(logout))
         navigationItem.rightBarButtonItems = [logoutButton]
     }
@@ -65,6 +75,15 @@ class ProfileController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         fetchProfileData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if userId != nil {
+            tabBarController?.tabBar.isHidden = true
+        } else {
+            tabBarController?.tabBar.isHidden = false
+        }
     }
     
     override func viewDidLoad() {
@@ -78,19 +97,19 @@ class ProfileController: UIViewController {
     
     @objc fileprivate func fetchProfileData() {
         self.refreshControl.beginRefreshing()
-        self.multiplier = 0
-        UserApiService.instance.getUserProfile { (result) in
+        UserApiService.instance.getUserProfile(userId: userId ?? AuthService.instance.userId){ (result) in
             
             switch result {
             case .success(let data):
                 self.user = data.data
+                self.followStatus = data.data?.followStatus
                 self.collectionView.reloadData()
             case .failure(let err):
                 print(err)
             }
         }
         
-        PostApiService.instance.getPostsByUser(userId: AuthService.instance.userId, limit: 15, skip: 0) { (result) in
+        PostApiService.instance.getPostsByUser(userId: userId ?? AuthService.instance.userId, limit: 15, skip: 0) { (result) in
             switch result {
             case .success(let data):
                 self.posts = data.data
@@ -107,6 +126,7 @@ class ProfileController: UIViewController {
     fileprivate func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.register(FriendProfileInfo.self, forCellWithReuseIdentifier: FriendProfileInfoCellId)
         collectionView.register(ProfileInfo.self, forCellWithReuseIdentifier: ProfileInfoCellId)
         collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCellId)
         
@@ -119,7 +139,7 @@ class ProfileController: UIViewController {
         do {
          
 //            self.logoutHud.hide()
-            dismiss(animated: true){
+            try self.dismiss(animated: true){
             }
         } catch(let err) {
             print("ERROR LOGGING OUT")
@@ -163,13 +183,48 @@ extension ProfileController: UICollectionViewDelegate, UICollectionViewDataSourc
         return 3 + noOfItems
     }
     
-   
+    @objc private func handleFollow() {
+        if let userId = self.userId {
+
+            FollowApiService.instance.followOrUnfollowAUser(by: AuthService.instance.userId, to: userId) { (result) in
+                switch result {
+                case .success(let result):
+
+                    let indexPath = IndexPath(item: 0, section: 0)
+                    
+                    switch result.status {
+                    case 201:
+                        (self.collectionView.cellForItem(at: indexPath) as! FriendProfileInfo).setStatus(status: true)
+                        
+                    case 200:
+                        (self.collectionView.cellForItem(at: indexPath) as! FriendProfileInfo).setStatus(status: false)
+                    default:
+                        print("Error")
+                    }
+
+                case .failure(let err):
+                    print("Error in handle follow or unfollow request - response /")
+                    print(err.localizedDescription)
+                }
+            }
+        }
+    }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.section == 0 {
+            if let followStatus = self.followStatus {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FriendProfileInfoCellId, for: indexPath) as! FriendProfileInfo
+                
+                cell.profile = user
+                cell.setStatus(status: followStatus)
+                cell.followButton.addTarget(self, action: #selector(handleFollow), for: .touchUpInside)
+                
+                return cell
+            }
+            
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileInfoCellId, for: indexPath) as! ProfileInfo
-            cell.profile = user
+            cell.profile = self.user
             return cell
         }
 

@@ -13,6 +13,7 @@ extension RegisterController: UIImagePickerControllerDelegate, UINavigationContr
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.editedImage] as? UIImage {
             profileImage.setImage(image, for: .normal)
+            profileImage.setAttributedTitle(nil, for: .normal)
             chosenImage = image
         }
         
@@ -121,9 +122,15 @@ class RegisterController: UIViewController {
                     switch response.status {
                     case 201:
                         self.registerHud.hide()
-                        let homeController = HomeController()
-                        homeController.modalPresentationStyle = .overFullScreen
-                        self.present(homeController, animated: true, completion: nil)
+                        AuthService.instance.isLoggedIn = true
+                        if let _id = response.data?._id, let jwtToken = response.token {
+                            AuthService.instance.userId = _id
+                            AuthService.instance.jwtToken = jwtToken
+
+                            let homeController = HomeController()
+                            homeController.modalPresentationStyle = .overFullScreen
+                            self.present(homeController, animated: true, completion: nil)
+                        }
                         
                     default:
                         self.registerHud.hide()

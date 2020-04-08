@@ -14,15 +14,12 @@ class PhotoCell: UICollectionViewCell {
         didSet {
             if let photoUrl = data?.photo {
                 photoView.loadImageUsingUrl(string: "\(PHOTO_IMAGE_URL)\(photoUrl)")
-//                self.layoutIfNeeded()
-//                isHidden = false
             }
         }
     }
     
     let photoView: CacheImageView = {
         let iv = CacheImageView()
-//        iv.contentMode = .scaleAspectFit
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.backgroundColor = #colorLiteral(red: 0.937254902, green: 0.937254902, blue: 0.937254902, alpha: 1)

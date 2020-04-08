@@ -14,20 +14,34 @@ class MessageController: UIViewController, UITableViewDelegate, UITableViewDataS
     let tableView = UITableView()
     var chatBoxes = [ChatBox]()
     
-    private func addDummyChatBox() {
-        let markZuckerberg = ChatBox(id: nil, lastMin: "3 mins", chatUserName: "Mark Zuckerberg", chatUserImage: "mark_zuckerberg", lastMessage: "Hey! I need your advice for new feature for instagram.")
-        let juricDaniel = ChatBox(id: nil, lastMin: "26 mins", chatUserName: "Juric Daniel", chatUserImage: "juric_daniel", lastMessage: "I am the boss here. You know what i mean?")
-        let poeMamheThar = ChatBox(id: nil, lastMin: "7 mins", chatUserName: "Jeff Bezos", chatUserImage: "jeff", lastMessage: "Please contact me ASAP.")
-        let nanPhooPhooMon = ChatBox(id: nil, lastMin: "57 mins", chatUserName: "Sergey Brin", chatUserImage: "sergey", lastMessage: "Sergey sent a photo.")
-        let benedictCumberbatch = ChatBox(id: nil, lastMin: "Active Now", chatUserName: "Benedict Cumberbatch", chatUserImage: "benedict_cumberbatch", lastMessage: "I am going to win Oscar tonight? Have you heard already?")
-        let khinYatiThin = ChatBox(id: nil, lastMin: "26 mins", chatUserName: "Bill Gates", chatUserImage: "bill", lastMessage: "Bill reacted your message.")
-        let honeyNwayOo = ChatBox(id: nil, lastMin: "Active Now", chatUserName: "Elon Musk", chatUserImage: "elon", lastMessage: "We're going to Mars next year.")
-        chatBoxes = [ markZuckerberg, juricDaniel, poeMamheThar, nanPhooPhooMon, benedictCumberbatch, khinYatiThin, honeyNwayOo, markZuckerberg, juricDaniel, poeMamheThar, nanPhooPhooMon, benedictCumberbatch, khinYatiThin, honeyNwayOo ]
+    let refreshControl: UIRefreshControl = {
+        let rc = UIRefreshControl()
+        rc.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        return rc
+    }()
+    
+    @objc private func refreshData() {
+    }
+    
+    
+    @objc private func fetchChatboxes() {
+        tableView.refreshControl?.beginRefreshing()
+        SocketService.instance.fetchChatboxes { (result) in
+            switch result {
+            case .success(let data):
+                self.chatBoxes = data
+                self.tableView.reloadData()
+            case .failure(let err):
+                print("Error : \(err.localizedDescription)")
+            }
+            self.tableView.refreshControl?.endRefreshing()
+        }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        fetchChatboxes()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -45,9 +59,10 @@ class MessageController: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = 92
-        addDummyChatBox()
-        tableView.pin(to: view)
+        tableView.separatorStyle = .none
         
+        tableView.pin(to: view)
+        tableView.refreshControl = refreshControl
         tableView.register(ChatBoxCell.self, forCellReuseIdentifier: cellId)
     }
     

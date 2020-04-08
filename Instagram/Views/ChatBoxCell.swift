@@ -10,8 +10,8 @@ import UIKit
 
 class ChatBoxCell: UITableViewCell {
     
-    let userImage: UIImageView = {
-        let iv = UIImageView()
+    let userImage: CacheImageView = {
+        let iv = CacheImageView()
         let img = UIImage(named: "mark_zuckerberg")
         iv.contentMode = .scaleAspectFill
         iv.layer.cornerRadius = 30
@@ -71,10 +71,18 @@ class ChatBoxCell: UITableViewCell {
     
     var chatBox: ChatBox? {
         didSet {
-            userImage.image = UIImage(named: chatBox?.chatUserImage ?? "unknown_user")
-            userNameLabel.text = chatBox?.chatUserName ?? "Unknown User"
-            lastMinLabel.text = chatBox?.lastMin ?? ""
-            lastMsgLabel.text = chatBox?.lastMessage ?? ""
+            if let imageUrl = chatBox?.user1?.profileImage {
+                userImage.loadImageUsingUrl(string: "\(PROFILE_IMAGE_URL)\(imageUrl)")
+            }
+            if let username = chatBox?.user1?.username {
+                userNameLabel.text = username
+            }
+            if let lastMessage = chatBox?.lastMessage {
+                lastMsgLabel.text = lastMessage
+            }
+            if let lastMin = chatBox?.updatedAt {
+                lastMinLabel.text = lastMin
+            }
         }
     }
     

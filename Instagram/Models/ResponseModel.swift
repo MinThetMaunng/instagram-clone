@@ -19,6 +19,8 @@ struct LoginResponse: Codable {
 struct SignupResponse: Codable {
     var status: Int
     var msg: String?
+    var data: User?
+    var token: String?
     var error: ErrorMessage?
 }
 
@@ -57,9 +59,24 @@ struct GetUsersResponse: Codable {
     var error: [String:String]?
     var total: Int?
     var data: [User]?
+    var followStatus: Bool?
 }
 
+struct FollowOrUnfollowResponse: Codable {
+    var status: Int
+    var msg: String?
+    var error: FollowErrorMessage?
+}
 
+struct ChatBox: Codable {
+    var _id: String
+    var createdAt: String?
+    var user1: User?
+    var user2: User?
+    var lastMessage: String
+    var updatedAt: String
+    var __v: Int?
+}
 
 
 struct UserPost: Codable {
@@ -74,6 +91,7 @@ struct UserProfileData: Codable {
     var noOfFollowings: Int
     var noOfPosts: Int
     var user: User?
+    var followStatus: Bool?
 }
 
 struct PostErrorMessage: Codable {
@@ -87,6 +105,11 @@ struct ErrorMessage: Codable {
     var password: [String]?
 }
 
+struct FollowErrorMessage: Codable {
+    var whoFollow: [String]?
+    var toWhom: [String]?
+}
+
 struct Post: Codable {
     var _id: String
     var status: String?
@@ -97,7 +120,6 @@ struct Post: Codable {
     var __v: Int?
 }
 
-
 struct User: Codable {
     var _id: String
     var photo: String?
@@ -105,5 +127,12 @@ struct User: Codable {
     var email: String?
     var password: String?
     var profileImage: String?
+    var __v: Int?
+}
+
+struct Follow: Codable {
+    var _id: String?
+    var whoFollow: String?
+    var toWhom: String?
     var __v: Int?
 }

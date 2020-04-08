@@ -8,10 +8,3 @@
 
 import Foundation
 
-struct ChatBox: Codable {
-    var id: String?
-    var lastMin: String?
-    var chatUserName: String
-    var chatUserImage: String?
-    var lastMessage: String?
-}

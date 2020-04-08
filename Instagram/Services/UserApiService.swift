@@ -29,8 +29,8 @@ class UserApiService {
         }.resume()
     }
     
-    func getUserProfile(completion: @escaping (Result<GetUserProfileResponse, Error>) -> () ) {
-        guard let url = URL(string: "\(GET_PROFILE)\(AuthService.instance.userId)") else { return }
+    func getUserProfile(userId: String, completion: @escaping (Result<GetUserProfileResponse, Error>) -> () ) {
+        guard let url = URL(string: "\(GET_PROFILE)\(userId)") else { return }
         var request = URLRequest(url: url)
         request.setValue(AuthService.instance.jwtToken, forHTTPHeaderField: "Authorization")
         
