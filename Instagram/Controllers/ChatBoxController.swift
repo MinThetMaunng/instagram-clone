@@ -11,13 +11,23 @@ import UIKit
 class ChatBoxController: UIViewController {
 
     var chatbox: ChatBox?
+    var messages: [[String: String]] = [
+        ["message": "Hello"],
+        ["message": "Tagal so"],
+        ["message": "Hi"],
+        ["message": "I am Juric Daniel. I am an iOS developer and a former Node.js Developer. It is nice to meet you. What's your name?"],
+        ["message": "I am Min Thet Maung. I am a Chief Executive Officer at Myanmy. Mhyanmy is more than a social network. People here are using Myanmy in their daily life. They consider it as a one-stop service app. How about you? What do you think about Myanmy? I am Juric Daniel. I am an iOS developer and a former Node.js Developer. It is nice to meet you. What's your name?"],
+        ["message": "Well, as a developer UI is really great and transactions are really fast. That's awesome."]
+    ]
     let CellId = "CellId"
+    
     var collectionView: UICollectionView = {
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-//        layout.minimumInteritemSpacing = 10
-//        layout.minimumLineSpacing = 10
+//        layout.minimumInteritemSpacing = 50
+//        layout.minimumLineSpacing = 50
+        layout.sectionInset = UIEdgeInsets(top: 5, left: 0, bottom: 0, right: 15)
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .white
@@ -31,6 +41,10 @@ class ChatBoxController: UIViewController {
         setupViews()
         setupNotificationObservers()
         setupTapGesture()
+    }
+    
+    override func viewWillLayoutSubviews() {
+        view.layoutIfNeeded()
     }
     
     let titleView: UILabel = {
@@ -178,7 +192,7 @@ class ChatBoxController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: CellId)
+        collectionView.register(MessageCell.self, forCellWithReuseIdentifier: CellId)
         
     }
     
@@ -224,23 +238,50 @@ class ChatBoxController: UIViewController {
 
 
 extension ChatBoxController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 1
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 15
+        return messages.count
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 80)
+        
+        if let messageText = self.messages[indexPath.section]["message"] {
+            let estimatedRect = calculateSizeForMessageTextView(text: messageText)
+            return CGSize(width: view.frame.width, height: estimatedRect.height + 20)
+        }
+        
+        return CGSize(width: view.frame.width, height: 120)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellId, for: indexPath) as! UICollectionViewCell
-//        cell.backgroundColor = .systemBlue
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellId, for: indexPath) as! MessageCell
+        cell.messageLabel.text = self.messages[indexPath.section]["message"]
+        
+        if let messageText = self.messages[indexPath.section]["message"] {
+        
+            let estimatedRect = calculateSizeForMessageTextView(text: messageText)
+            cell.messageLabel.frame = CGRect(x: 62 + 16, y: 10, width: estimatedRect.width, height: estimatedRect.height)
+            cell.textBubbleView.frame = CGRect(x: 62, y: 0, width: estimatedRect.width + 32, height: estimatedRect.height + 20)
+        }
         return cell
     }
     
+    
+     private func calculateSizeForMessageTextView(text: String) -> CGRect {
+        let size = CGSize(width: view.frame.width - 160, height: 4000)
+         let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+        let estimatedSize = NSString(string: text).boundingRect(with: size, options: options, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 20, weight: .regular)], context: nil)
+         
+         return estimatedSize
+     }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
     
 }

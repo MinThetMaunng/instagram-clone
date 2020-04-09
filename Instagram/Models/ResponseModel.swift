@@ -130,6 +130,13 @@ struct User: Codable {
     var __v: Int?
 }
 
+struct Message: Codable {
+    var _id: String?
+    var sentBy: User?
+    var message: String?
+    var chatbox: String?
+}
+
 struct Follow: Codable {
     var _id: String?
     var whoFollow: String?

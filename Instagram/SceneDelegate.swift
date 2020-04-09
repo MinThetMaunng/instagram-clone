@@ -17,7 +17,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
-        window?.rootViewController = HomeController()
+        let navController = UINavigationController(rootViewController: ChatBoxController())
+        window?.rootViewController = navController //HomeController()
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window?.windowScene = windowScene
     }

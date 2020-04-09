@@ -16,6 +16,7 @@
 		D92EDB93242CEE3F00FC37D3 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D92EDB92242CEE3F00FC37D3 /* UserCell.swift */; };
 		D93A88AF242E4A22000041F3 /* FollowApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93A88AE242E4A22000041F3 /* FollowApiService.swift */; };
 		D93A88B1242E4F4F000041F3 /* FriendProfileInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93A88B0242E4F4F000041F3 /* FriendProfileInfoCell.swift */; };
+		D93E4075243EC2C3000E2AEA /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93E4074243EC2C3000E2AEA /* MessageCell.swift */; };
 		D9421EAD240A2058003FCEE2 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9421EAC240A2058003FCEE2 /* CustomButton.swift */; };
 		D948BF10241A11AB0027AF74 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948BF0F241A11AB0027AF74 /* Image.swift */; };
 		D96C5F78240838840023B008 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D96C5F77240838840023B008 /* SearchController.swift */; };
@@ -73,6 +74,7 @@
 		D92EDB92242CEE3F00FC37D3 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		D93A88AE242E4A22000041F3 /* FollowApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowApiService.swift; sourceTree = "<group>"; };
 		D93A88B0242E4F4F000041F3 /* FriendProfileInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendProfileInfoCell.swift; sourceTree = "<group>"; };
+		D93E4074243EC2C3000E2AEA /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		D93FA37D2424DAF300B4D12E /* libSDWebImage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libSDWebImage.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D93FA37F2424DB1200B4D12E /* libSDWebImage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libSDWebImage.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9421EAC240A2058003FCEE2 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 				D9FA37E12428D3430034C68F /* PhotoCell.swift */,
 				D92EDB92242CEE3F00FC37D3 /* UserCell.swift */,
 				D93A88B0242E4F4F000041F3 /* FriendProfileInfoCell.swift */,
+				D93E4074243EC2C3000E2AEA /* MessageCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -358,6 +361,7 @@
 				D99FD108241B713C00695A02 /* AuthService.swift in Sources */,
 				D90AC5B9241D2A79009267F6 /* PostApiService.swift in Sources */,
 				D9F2B5762404D4D7008B0B8A /* Post.swift in Sources */,
+				D93E4075243EC2C3000E2AEA /* MessageCell.swift in Sources */,
 				D9F2B5792404D548008B0B8A /* Constants.swift in Sources */,
 				D9F2B5852404D633008B0B8A /* RegisterController.swift in Sources */,
 				D96C5F78240838840023B008 /* SearchController.swift in Sources */,
