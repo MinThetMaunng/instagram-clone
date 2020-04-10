@@ -191,9 +191,10 @@ extension ProfileController: UICollectionViewDelegate, UICollectionViewDataSourc
                 let chatboxController = ChatBoxController()
                 
                 chatboxController.chatbox = data
-                chatboxController.friend = data.user1
                 if data.user1?._id == AuthService.instance.userId {
                     chatboxController.friend = data.user2
+                } else {
+                    chatboxController.friend = data.user1
                 }
                 
                 self.navigationController?.pushViewController(chatboxController, animated: true)

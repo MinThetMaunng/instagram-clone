@@ -41,16 +41,20 @@ enum UserDefaultsKey : String {
 
 enum SocketEvents : String {
     case CONNECTION = "connection"
-    case RETRIEVE_CHATBOXES = "retrieveChatboxes"
-    case SEND_CHATBOXES = "sendChatboxes"
+    
+    case GET_CHATBOX = "getChatbox"
+    case GET_CHATBOXES = "getChatboxes"
+    case RECEIVE_CHATBOXES = "receiveChatboxes"
     case CREATE_CHAT_BOX = "createChatboxes"
+    
     case JOIN_ROOMS = "joinRooms"
     case JOIN_STATUS = "joinStatus"
 
-    case RETRIEVE_MESSAGES = "retrieveMessages"
+    case GET_MESSAGES = "getMessages"
+    case RECEIVE_MESSAGES = "receiveMessages"
+    
+    case SEND_NEW_MESSAGE = "sendNewMessage"
     case RECEIVE_NEW_MESSAGE = "receiveNewMessage"
-    case SEND_MESSAGE = "sendMessage"
 }
-
 
 let NOTI_BACK_TO_FOREGROUND = Notification.Name("backToForeground")

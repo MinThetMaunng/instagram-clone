@@ -14,6 +14,7 @@ class ChatBoxController: UIViewController {
         didSet {
             titleLabel.text = friend?.username
             if let imageUrl = friend?.profileImage {
+                
                 profileImage.loadImageUsingUrl(string: "\(PROFILE_IMAGE_URL)\(imageUrl)")
             }
         }
@@ -25,11 +26,9 @@ class ChatBoxController: UIViewController {
     let CellId = "CellId"
     
     var collectionView: UICollectionView = {
-        
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.sectionInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
-        
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .white
         cv.allowsSelection = false
@@ -40,9 +39,28 @@ class ChatBoxController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        fetchMessages()
         setupNotificationObservers()
         setupTapGesture()
         listenNewMessage()
+    }
+    
+    private func fetchMessages() {
+        guard let chatboxId = chatbox?._id else { return }
+        collectionView.refreshControl?.beginRefreshing()
+        
+        SocketService.instance.fetchMessages(chatbox: chatboxId) { (result) in
+            switch result {
+            case .success(let data):
+                self.messages = data
+                self.collectionView.refreshControl?.endRefreshing()
+                self.collectionView.reloadData()
+            case .failure(let err):
+                print("Err")
+                print(err.localizedDescription)
+                self.collectionView.refreshControl?.endRefreshing()
+            }
+        }
     }
     
     private func listenNewMessage() {
@@ -55,7 +73,6 @@ class ChatBoxController: UIViewController {
                 print("ERR")
                 print(err.localizedDescription)
             }
-            
             
         }
     }
@@ -283,12 +300,14 @@ class ChatBoxController: UIViewController {
         let keyboardFrame = value.cgRectValue
         let bottomSpace = view.frame.height - bottomBackgroundView.frame.origin.y - bottomBackgroundView.frame.height
         let difference = keyboardFrame.height - bottomSpace
-
+        
+        self.view.layoutIfNeeded()
         self.view.transform = CGAffineTransform(translationX: 0, y: -difference)
     }
     
     @objc fileprivate func handleKeyboardHide() {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.view.layoutIfNeeded()
             self.view.transform = .identity
         })
     }
@@ -321,13 +340,20 @@ extension ChatBoxController: UICollectionViewDelegate, UICollectionViewDataSourc
         let messageText = self.messages[indexPath.section].message
         cell.messageLabel.text = messageText
         let estimatedRect = calculateSizeForMessageTextView(text: messageText)
+        
         if self.messages[indexPath.section].sentBy != AuthService.instance.userId {
-            cell.messageLabel.frame = CGRect(x: 16 + 32, y: 10, width: estimatedRect.width, height: estimatedRect.height)
+            
             cell.textBubbleView.backgroundColor = .white
             cell.textBubbleView.layer.borderColor = UIColor(white: 0.95, alpha: 1).cgColor
             cell.textBubbleView.layer.borderWidth = 2
-            cell.textBubbleView.frame = CGRect(x: 32, y: 0, width: estimatedRect.width + 32, height: estimatedRect.height + 20)
+            
+            cell.messageLabel.frame = CGRect(x: 32, y: 10, width: estimatedRect.width, height: estimatedRect.height)
+            cell.textBubbleView.frame = CGRect(x: 16, y: 0, width: estimatedRect.width + 32, height: estimatedRect.height + 20)
         } else {
+            cell.textBubbleView.backgroundColor = UIColor(white: 0.95, alpha: 1)
+            cell.textBubbleView.layer.borderColor = UIColor(white: 0.95, alpha: 1).cgColor
+            cell.textBubbleView.layer.borderWidth = 2
+            
             cell.messageLabel.frame = CGRect(x: view.frame.width - estimatedRect.width - 32, y: 10, width: estimatedRect.width, height: estimatedRect.height)
             cell.textBubbleView.frame = CGRect(x: view.frame.width - estimatedRect.width - 32 - 16, y: 0, width: estimatedRect.width + 32, height: estimatedRect.height + 20)
         }

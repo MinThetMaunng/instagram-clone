@@ -74,7 +74,7 @@ struct ChatBox: Codable {
     var user1: User?
     var user2: User?
     var lastMessage: String
-    var updatedAt: String
+    var updatedAt: String?
     var __v: Int?
 }
 

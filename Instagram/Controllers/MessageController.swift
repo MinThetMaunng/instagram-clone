@@ -82,9 +82,10 @@ class MessageController: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ChatBoxCell
         
-        cell.friend = chatBoxes[indexPath.row].user1
         if chatBoxes[indexPath.row].user1?._id == AuthService.instance.userId {
             cell.friend = chatBoxes[indexPath.row].user2
+        } else {
+            cell.friend = chatBoxes[indexPath.row].user1
         }
         cell.chatbox = chatBoxes[indexPath.row]
         return cell
@@ -95,9 +96,10 @@ class MessageController: UIViewController, UITableViewDelegate, UITableViewDataS
         let chatboxController = ChatBoxController()
         chatboxController.chatbox = chatbox
         
-        chatboxController.friend = chatBoxes[indexPath.row].user1
         if chatBoxes[indexPath.row].user1?._id == AuthService.instance.userId {
             chatboxController.friend = chatBoxes[indexPath.row].user2
+        } else {
+            chatboxController.friend = chatBoxes[indexPath.row].user1
         }
         navigationController?.pushViewController(chatboxController, animated: true)
     }
