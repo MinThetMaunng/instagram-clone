@@ -69,20 +69,27 @@ class ChatBoxCell: UITableViewCell {
         constraintWithVisualFormat(format: "V:|-20-[v0(20)]-5-[v1]-20-|", views: lastMinLabel, lastMsgLabel)
     }
     
-    var chatBox: ChatBox? {
+    var friend: User? {
         didSet {
-            if let imageUrl = chatBox?.user1?.profileImage {
+            if let imageUrl = friend?.profileImage {
                 userImage.loadImageUsingUrl(string: "\(PROFILE_IMAGE_URL)\(imageUrl)")
             }
-            if let username = chatBox?.user1?.username {
+            if let username = friend?.username {
                 userNameLabel.text = username
             }
-            if let lastMessage = chatBox?.lastMessage {
+        }
+    }
+    
+    var chatbox: ChatBox? {
+        didSet {
+            
+            if let lastMessage = chatbox?.lastMessage {
                 lastMsgLabel.text = lastMessage
             }
-            if let lastMin = chatBox?.updatedAt {
+            if let lastMin = chatbox?.updatedAt {
                 lastMinLabel.text = lastMin
             }
+            
         }
     }
     

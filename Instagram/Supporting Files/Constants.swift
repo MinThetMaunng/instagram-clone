@@ -44,9 +44,12 @@ enum SocketEvents : String {
     case RETRIEVE_CHATBOXES = "retrieveChatboxes"
     case SEND_CHATBOXES = "sendChatboxes"
     case CREATE_CHAT_BOX = "createChatboxes"
+    case JOIN_ROOMS = "joinRooms"
+    case JOIN_STATUS = "joinStatus"
 
     case RETRIEVE_MESSAGES = "retrieveMessages"
-    case SEND_MESSAGES = "sendMessages"
+    case RECEIVE_NEW_MESSAGE = "receiveNewMessage"
+    case SEND_MESSAGE = "sendMessage"
 }
 
 

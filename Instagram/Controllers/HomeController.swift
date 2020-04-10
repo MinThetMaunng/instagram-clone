@@ -11,11 +11,13 @@ import UIKit
 class HomeController: UITabBarController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupTabBar()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        SocketService.instance.joinRooms()
         if AuthService.instance.isLoggedIn == false {
             let navController = UINavigationController(rootViewController: LoginController())
             navController.modalPresentationStyle = .fullScreen

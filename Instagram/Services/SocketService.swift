@@ -22,12 +22,25 @@ class SocketService: NSObject {
         super.init()
     }
     
+    func joinRooms() {
+        
+        guard AuthService.instance.jwtToken != "" else { return }
+        
+        socket.emit(SocketEvents.JOIN_ROOMS.rawValue, AuthService.instance.jwtToken) {
+            
+            self.socket.on(SocketEvents.JOIN_STATUS.rawValue) { (dataArray, ack) in
+                guard let data = dataArray[0] as? [String: Bool] else { return }
+
+                if data["success"] == true {
+                } else {
+                    print("Connecting rooms error")
+                }
+            }
+        }
+    }
+    
     func fetchChatboxes(completion: @escaping (Result<[ChatBox], Error>) -> ()) {
         
-//        createChatbox(user1: "5e84499235db99002470420d", user2: "5e844a8b35db990024704213") { (complete) in
-//            print(complete)
-//        }
-
         socket.emit(SocketEvents.RETRIEVE_CHATBOXES.rawValue, AuthService.instance.jwtToken) {
     
             self.socket.on(SocketEvents.SEND_CHATBOXES.rawValue) { (dataArray, ack) in
@@ -35,37 +48,68 @@ class SocketService: NSObject {
                 guard let data = dataArray[0] as? [[String: Any]] else { return }
                     
                 do {
-                    let DataJson = try JSONSerialization.data(withJSONObject: data, options: .init())
-                    let json = try JSONDecoder().decode([ChatBox].self, from: DataJson)
+                    let dataJson = try JSONSerialization.data(withJSONObject: data, options: .init())
+                    let json = try JSONDecoder().decode([ChatBox].self, from: dataJson)
+                  
                     completion(.success(json))
+                    
                 } catch(let err) {
-                    print("error")
                     completion(.failure(err))
                 }
             }
-            
-            
         }
-        
         
     }
     
-    func createChatbox(user1: String, user2: String, completion: @escaping (Bool) -> ()) {
-        socket.emit(SocketEvents.CREATE_CHAT_BOX.rawValue, user1, user2) {
-            self.socket.on(SocketEvents.RETRIEVE_MESSAGES.rawValue) { (data, ack) in
-                print("data")
-                print(data)
+    func createChatbox(user2: String, completion: @escaping (Result<ChatBox, Error>) -> ()) {
+        
+        socket.emit(SocketEvents.CREATE_CHAT_BOX.rawValue, AuthService.instance.jwtToken, AuthService.instance.userId, user2) {
+    
+            self.socket.on(SocketEvents.RETRIEVE_MESSAGES.rawValue) { (dataArray, ack) in
+               
+                guard let data = dataArray[0] as? [String: Any] else { return }
+                    
+                do {
+                    let dataJson = try JSONSerialization.data(withJSONObject: data, options: .init())
+                    let json = try JSONDecoder().decode(ChatBox.self, from: dataJson)
+                    completion(.success(json))
+                    
+                } catch(let err) {
+                    completion(.failure(err))
+                }
             }
+        }
+        
+    }
+    
+    func sendMessage(message: String, chatboxId: String, completion: @escaping (Bool) -> ()) {
+        socket.emit(SocketEvents.SEND_MESSAGE.rawValue, AuthService.instance.jwtToken, message, chatboxId) {
+            completion(true)
+        }
+    }
+    
+    func listenNewMessage(completion: @escaping (Result<Message, Error>) -> ()) {
+        socket.on(SocketEvents.RECEIVE_NEW_MESSAGE.rawValue) { (dataArray, ack) in
+            
+            guard let data = dataArray[0] as? [String: Any] else { return }
+            do {
+                let dataJson = try JSONSerialization.data(withJSONObject: data, options: .init())
+                let json = try JSONDecoder().decode(Message.self, from: dataJson)
+                completion(.success(json))
+            } catch (let err) {
+                print("ERROR : \(err)")
+                completion(.failure(err))
+            }
+            
         }
     }
     
     func connect() {
-        print("Connected")
         socket.connect()
+        joinRooms()
     }
     
     func disconnect() {
-        print("Disconnected")
         socket.disconnect()
     }
 }

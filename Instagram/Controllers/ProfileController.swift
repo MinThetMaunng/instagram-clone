@@ -19,7 +19,6 @@ class ProfileController: UIViewController {
         didSet {
             if let username = self.user?.user?.username {
 
-//                titleView.text = username
                 navigationItem.title = username
             }
         }
@@ -183,7 +182,32 @@ extension ProfileController: UICollectionViewDelegate, UICollectionViewDataSourc
         return 3 + noOfItems
     }
     
+    @objc private func handleMessage() {
+        guard let userId = self.userId else { return }
+    
+        SocketService.instance.createChatbox(user2: userId) { (result) in
+            switch result {
+            case .success(let data):
+                let chatboxController = ChatBoxController()
+                
+                chatboxController.chatbox = data
+                chatboxController.friend = data.user1
+                if data.user1?._id == AuthService.instance.userId {
+                    chatboxController.friend = data.user2
+                }
+                
+                self.navigationController?.pushViewController(chatboxController, animated: true)
+            case .failure(let err):
+                print("err")
+                print(err.localizedDescription)
+            }
+        }
+        return
+
+    }
+    
     @objc private func handleFollow() {
+        
         if let userId = self.userId {
 
             FollowApiService.instance.followOrUnfollowAUser(by: AuthService.instance.userId, to: userId) { (result) in
@@ -219,7 +243,7 @@ extension ProfileController: UICollectionViewDelegate, UICollectionViewDataSourc
                 cell.profile = user
                 cell.setStatus(status: followStatus)
                 cell.followButton.addTarget(self, action: #selector(handleFollow), for: .touchUpInside)
-                
+                cell.messageButton.addTarget(self, action: #selector(handleMessage), for: .touchUpInside)
                 return cell
             }
             

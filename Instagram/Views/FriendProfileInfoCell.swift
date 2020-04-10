@@ -80,7 +80,6 @@ class FriendProfileInfo: UICollectionViewCell {
         btn.layer.borderWidth = 0.5
         btn.layer.cornerRadius = 3
         btn.clipsToBounds = true
-        btn.addTarget(self, action: #selector(handleMessage), for: .touchUpInside)
         return btn
     }()
     
@@ -94,10 +93,6 @@ class FriendProfileInfo: UICollectionViewCell {
         self.followButton.layer.borderColor = borderColor.cgColor
         self.followButton.backgroundColor = backgroundColor
         
-    }
-    
-    @objc private func handleMessage() {
-        print("MESSAGE")
     }
     
     let dividerLine: UIView = {

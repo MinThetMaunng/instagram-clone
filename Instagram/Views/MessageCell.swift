@@ -47,13 +47,13 @@ class MessageCell: UICollectionViewCell {
     fileprivate func setupViews() {
         addSubview(textBubbleView)
         addSubview(messageLabel)
-        addSubview(profileImage)
+//        addSubview(profileImage)
         
 //        constraintWithVisualFormat(format: "H:|[v0]|", views: messageTextView)
 //        constraintWithVisualFormat(format: "V:|[v0]|", views: messageTextView)
         
-        constraintWithVisualFormat(format: "H:|-16-[v0(30)]", views: profileImage)
-        constraintWithVisualFormat(format: "V:[v0(30)]|", views: profileImage)
+//        constraintWithVisualFormat(format: "H:|-16-[v0(30)]", views: profileImage)
+//        constraintWithVisualFormat(format: "V:[v0(30)]|", views: profileImage)
     }
     
     required init?(coder: NSCoder) {

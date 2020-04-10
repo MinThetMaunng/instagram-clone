@@ -27,6 +27,7 @@ class AuthService {
             return defaults.string(forKey: UserDefaultsKey.JWT_TOKEN.rawValue) ?? ""
         }
         set {
+            SocketService.instance.joinRooms()
             defaults.set(newValue, forKey: UserDefaultsKey.JWT_TOKEN.rawValue)
         }
     }
