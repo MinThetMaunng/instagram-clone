@@ -136,7 +136,7 @@ class RegisterController: UIViewController {
                         self.registerHud.hide()
                     }
                 case .failure(let error):
-                    print("Error")
+                    print("Error in signing up")
                     print(error)
                     
                 }

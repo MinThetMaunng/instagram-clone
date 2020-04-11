@@ -182,9 +182,9 @@ extension ProfileController: UICollectionViewDelegate, UICollectionViewDataSourc
         return 3 + noOfItems
     }
     
-    @objc private func handleMessage() {
+    @objc private func handleMessage(sender: UIButton) {
         guard let userId = self.userId else { return }
-    
+        sender.isEnabled = false
         SocketService.instance.createChatbox(user2: userId) { (result) in
             switch result {
             case .success(let data):
@@ -196,12 +196,16 @@ extension ProfileController: UICollectionViewDelegate, UICollectionViewDataSourc
                 } else {
                     chatboxController.friend = data.user1
                 }
-                
+
+                sender.isEnabled = true
                 self.navigationController?.pushViewController(chatboxController, animated: true)
             case .failure(let err):
-                print("err")
+
+                sender.isEnabled = true
+                print("err in handle message")
                 print(err.localizedDescription)
             }
+
         }
         return
 
@@ -244,7 +248,7 @@ extension ProfileController: UICollectionViewDelegate, UICollectionViewDataSourc
                 cell.profile = user
                 cell.setStatus(status: followStatus)
                 cell.followButton.addTarget(self, action: #selector(handleFollow), for: .touchUpInside)
-                cell.messageButton.addTarget(self, action: #selector(handleMessage), for: .touchUpInside)
+                cell.messageButton.addTarget(self, action: #selector(handleMessage(sender:)), for: .touchUpInside)
                 return cell
             }
             

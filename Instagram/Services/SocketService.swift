@@ -68,12 +68,14 @@ class SocketService: NSObject {
             self.socket.on(SocketEvents.GET_CHATBOX.rawValue) { (dataArray, ack) in
                
                 guard let data = dataArray[0] as? [String: Any] else { return }
+
                 do {
                     let dataJson = try JSONSerialization.data(withJSONObject: data, options: .init())
                     let json = try JSONDecoder().decode(ChatBox.self, from: dataJson)
                     completion(.success(json))
                     
                 } catch(let err) {
+                    print("ERR in create chatbox= \(err)")
                     completion(.failure(err))
                 }
             }
@@ -91,7 +93,6 @@ class SocketService: NSObject {
         
         socket.on(SocketEvents.RECEIVE_NEW_MESSAGE.rawValue) { (dataArray, ack) in
             guard let data = dataArray[0] as? [String: Any] else { return }
-            print("data")
             do {
                 let dataJson = try JSONSerialization.data(withJSONObject: data, options: .init())
                 let json = try JSONDecoder().decode(Message.self, from: dataJson)
@@ -114,7 +115,7 @@ class SocketService: NSObject {
                     let json = try JSONDecoder().decode([Message].self, from: dataJson)
                     completion(.success(json))
                 } catch(let err) {
-                    print("Error : \(err)")
+                    print("Error in fetching messages.")
                     completion(.failure(err))
                 }
             }

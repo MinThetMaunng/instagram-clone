@@ -85,7 +85,7 @@ class LoginController: UIViewController {
                         self.loginHud.hide()
                     }
                 case .failure(let error):
-                    print("Error")
+                    print("Error in logging in")
                     print(error)
                     
                 }

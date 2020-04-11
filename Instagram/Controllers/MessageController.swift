@@ -32,7 +32,7 @@ class MessageController: UIViewController, UITableViewDelegate, UITableViewDataS
                 self.chatBoxes = data
                 self.tableView.reloadData()
             case .failure(let err):
-                print("Error : \(err.localizedDescription)")
+                print("Error in fetching chatboxes: \(err.localizedDescription)")
             }
             self.tableView.refreshControl?.endRefreshing()
         }

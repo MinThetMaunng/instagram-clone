@@ -65,12 +65,6 @@ class PostCell: UITableViewCell {
         let screenWidth = self.frame.size.width
         let imageWidth = imageView.frame.size.width
         let imageHeight = imageView.frame.size.height
-        print("Before ")
-        print(imageView.frame.size)
-        print("screen width = \(screenWidth)")
-        print("image width = \(imageWidth)")
-        print("image height = \(imageHeight)")
-        
         
         let scale: CGFloat = imageWidth > screenWidth ? screenWidth / imageWidth : screenWidth / imageWidth
         let size = CGSize(width: imageWidth * scale, height: imageHeight * scale)

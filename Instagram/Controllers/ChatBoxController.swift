@@ -185,6 +185,7 @@ class ChatBoxController: UIViewController {
                     print("Not Completed")
                     self.sendButton.isEnabled = true
                 }
+                self.handleTyping(sender: self.textBox)
             }
         }
     }
