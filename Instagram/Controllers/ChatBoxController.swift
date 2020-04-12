@@ -25,6 +25,9 @@ class ChatBoxController: UIViewController {
 
     let CellId = "CellId"
     
+    var viewBottomAnchor: NSLayoutConstraint?
+    var bottomBackgroundViewBottomAnchor: NSLayoutConstraint?
+    
     var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -55,6 +58,7 @@ class ChatBoxController: UIViewController {
                 self.messages = data
                 self.collectionView.refreshControl?.endRefreshing()
                 self.collectionView.reloadData()
+                self.collectionView.scrollToItem(at: IndexPath(item: 0, section: self.messages.count - 1), at: .top, animated: true)
             case .failure(let err):
                 print("Err")
                 print(err.localizedDescription)
@@ -68,13 +72,19 @@ class ChatBoxController: UIViewController {
             switch result {
             case .success(let newMessage):
                 self.messages.append(newMessage)
+            
                 self.collectionView.reloadData()
+                  self.collectionView.scrollToItem(at: IndexPath(item: 0, section: self.messages.count - 1), at: .top, animated: true)
             case .failure(let err):
                 print("ERR")
                 print(err.localizedDescription)
             }
             
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     override func viewWillLayoutSubviews() {
@@ -206,18 +216,23 @@ class ChatBoxController: UIViewController {
     }
     
     fileprivate func setupBottomBackgroundViewConstraints() {
+        view.backgroundColor = .white
         view.addSubview(self.bottomBackgroundView)
         view.addSubview(self.collectionView)
 
         view.constraintWithVisualFormat(format: "H:|[v0]|", views: self.collectionView)
         view.constraintWithVisualFormat(format: "H:|[v0]|", views: self.bottomBackgroundView)
      
+        viewBottomAnchor = self.collectionView.bottomAnchor.constraint(equalTo: self.bottomBackgroundView.topAnchor, constant: 0)
+//        bottomBackgroundViewBottomAnchor = self.bottomBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 15)
+        
         NSLayoutConstraint.activate([
             self.bottomBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 15),
             self.bottomBackgroundView.heightAnchor.constraint(equalToConstant: 60),
             
-            self.collectionView.bottomAnchor.constraint(equalTo: self.bottomBackgroundView.topAnchor),
-            self.collectionView.topAnchor.constraint(equalTo: self.view.topAnchor)
+            viewBottomAnchor!,
+//            self.collectionView.bottomAnchor.constraint(equalTo: self.bottomBackgroundView.topAnchor, constant: 0),
+            self.collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor)
         ])
         
     }
@@ -299,16 +314,19 @@ class ChatBoxController: UIViewController {
     @objc fileprivate func handleKeyboardShow(notification: Notification) {
         guard let value = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
         let keyboardFrame = value.cgRectValue
-        let bottomSpace = view.frame.height - bottomBackgroundView.frame.origin.y - bottomBackgroundView.frame.height
-        let difference = keyboardFrame.height - bottomSpace
         
+        self.view.frame.size.height = self.view.frame.height - keyboardFrame.height - 15
+
         self.view.layoutIfNeeded()
-        self.view.transform = CGAffineTransform(translationX: 0, y: -difference)
+        self.collectionView.scrollToItem(at: IndexPath(item: 0, section: self.messages.count - 1), at: .top, animated: true)
     }
     
     @objc fileprivate func handleKeyboardHide() {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.view.layoutIfNeeded()
+        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+
+            self.view.frame = UIScreen.main.bounds
+            
+            self.collectionView.scrollToItem(at: IndexPath(item: 0, section: self.messages.count - 1), at: .top, animated: true)
             self.view.transform = .identity
         })
     }
