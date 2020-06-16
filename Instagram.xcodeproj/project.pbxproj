@@ -19,6 +19,7 @@
 		D93E4075243EC2C3000E2AEA /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93E4074243EC2C3000E2AEA /* MessageCell.swift */; };
 		D9421EAD240A2058003FCEE2 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9421EAC240A2058003FCEE2 /* CustomButton.swift */; };
 		D948BF10241A11AB0027AF74 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = D948BF0F241A11AB0027AF74 /* Image.swift */; };
+		D95149772448B49500686054 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95149762448B49500686054 /* NotificationService.swift */; };
 		D96C5F78240838840023B008 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D96C5F77240838840023B008 /* SearchController.swift */; };
 		D96F5C1E243B64E90076B7FC /* SocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D96F5C1D243B64E90076B7FC /* SocketService.swift */; };
 		D99FD106241B3E3C00695A02 /* CreatePostController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D99FD105241B3E3C00695A02 /* CreatePostController.swift */; };
@@ -79,6 +80,7 @@
 		D93FA37F2424DB1200B4D12E /* libSDWebImage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libSDWebImage.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9421EAC240A2058003FCEE2 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		D948BF0F241A11AB0027AF74 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
+		D95149762448B49500686054 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		D96C5F77240838840023B008 /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
 		D96F5C1D243B64E90076B7FC /* SocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketService.swift; sourceTree = "<group>"; };
 		D99FD105241B3E3C00695A02 /* CreatePostController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostController.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				D90AC5BA241D2A89009267F6 /* UserApiService.swift */,
 				D93A88AE242E4A22000041F3 /* FollowApiService.swift */,
 				D96F5C1D243B64E90076B7FC /* SocketService.swift */,
+				D95149762448B49500686054 /* NotificationService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -370,6 +373,7 @@
 				D9F2B5912404D706008B0B8A /* NotificationCell.swift in Sources */,
 				D9F2B57B2404D56A008B0B8A /* Extensions.swift in Sources */,
 				D9220AFA2410D37C00219323 /* ApiService.swift in Sources */,
+				D95149772448B49500686054 /* NotificationService.swift in Sources */,
 				D9F2B57D2404D59B008B0B8A /* InputText.swift in Sources */,
 				D9F2B58F2404D6DB008B0B8A /* NotificationController.swift in Sources */,
 				D9421EAD240A2058003FCEE2 /* CustomButton.swift in Sources */,

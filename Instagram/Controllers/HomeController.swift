@@ -11,18 +11,32 @@ import UIKit
 class HomeController: UITabBarController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupTabBar()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        SocketService.instance.joinRooms()
+
         if AuthService.instance.isLoggedIn == false {
             let navController = UINavigationController(rootViewController: LoginController())
             navController.modalPresentationStyle = .fullScreen
             self.present(navController, animated: false, completion: nil)
         }
+        SocketService.instance.joinRooms()
+        SocketService.instance.listenNewMessage { (result) in
+            switch result {
+            case .success(let newMessage):
+                if AuthService.instance.userId != newMessage.sentBy?._id {
+                    SocketService.instance.receiveNotification(username: newMessage.sentBy?.username ?? "Unknown", message: newMessage.message)
+                }
+                
+            case .failure(let err):
+                print("ERR")
+                print(err.localizedDescription)
+            }
+
+        }
+
     }
     
     private func setupTabBar() {
@@ -62,4 +76,5 @@ class HomeController: UITabBarController, UIImagePickerControllerDelegate, UINav
     }
 
 }
+
 

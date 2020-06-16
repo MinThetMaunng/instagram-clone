@@ -132,7 +132,7 @@ struct User: Codable {
 
 struct Message: Codable {
     var _id: String
-    var sentBy: String
+    var sentBy: User?
     var message: String
     var chatbox: String
     var updatedAt: String?

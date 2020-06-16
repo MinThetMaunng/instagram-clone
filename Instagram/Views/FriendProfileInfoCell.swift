@@ -29,7 +29,7 @@ class FriendProfileInfo: UICollectionViewCell {
             if let noOfFollowings = profile?.noOfFollowings {
                 
                 let attributedText = NSMutableAttributedString(string: "\(noOfFollowings)", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 20, weight: .semibold), NSAttributedString.Key.foregroundColor: UIColor.black])
-                attributedText.append(NSAttributedString(string: "\nFollowings", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14, weight: .regular)]))
+                attributedText.append(NSAttributedString(string: "\nFollowing", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14, weight: .regular)]))
                 followingLabel.attributedText = attributedText
                 
             }

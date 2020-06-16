@@ -41,6 +41,7 @@ class ChatBoxController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupViews()
         fetchMessages()
         setupNotificationObservers()
@@ -66,20 +67,20 @@ class ChatBoxController: UIViewController {
             }
         }
     }
+
     
     private func listenNewMessage() {
+        
         SocketService.instance.listenNewMessage { (result) in
             switch result {
             case .success(let newMessage):
                 self.messages.append(newMessage)
-            
                 self.collectionView.reloadData()
-                  self.collectionView.scrollToItem(at: IndexPath(item: 0, section: self.messages.count - 1), at: .top, animated: true)
+                self.collectionView.scrollToItem(at: IndexPath(item: 0, section: self.messages.count - 1), at: .top, animated: true)
             case .failure(let err):
                 print("ERR")
                 print(err.localizedDescription)
             }
-            
         }
     }
     
@@ -88,7 +89,7 @@ class ChatBoxController: UIViewController {
     }
     
     override func viewWillLayoutSubviews() {
-        view.layoutIfNeeded()
+//        view.layoutIfNeeded()
     }
     
     let profileImage: CacheImageView = {
@@ -259,9 +260,7 @@ class ChatBoxController: UIViewController {
         self.bottomBackgroundView.constraintWithVisualFormat(format: "V:|-5-[v0(45)]-10-|", views: self.bottomRoundView)
     }
     
-    private func setupViews() {
-        view.backgroundColor = .white
-       
+    private func setupNavBar() {
         titleView.addSubview(profileImage)
         titleView.addSubview(titleLabel)
         
@@ -273,10 +272,15 @@ class ChatBoxController: UIViewController {
         
         navigationController?.navigationBar.tintColor = .black
         navigationController?.view.backgroundColor = .white
-        
-        
+
+    }
+    
+    private func setupViews() {
+        view.backgroundColor = .white
         tabBarController?.tabBar.isHidden = true
+       
         
+        setupNavBar()
         setupBottomRoundSubViews()
         setupBottomBackgroundSubViews()
         setupBottomBackgroundViewConstraints()
@@ -314,17 +318,14 @@ class ChatBoxController: UIViewController {
     @objc fileprivate func handleKeyboardShow(notification: Notification) {
         guard let value = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
         let keyboardFrame = value.cgRectValue
+        let bottomSpace = view.frame.height - bottomBackgroundView.frame.origin.y - bottomBackgroundView.frame.height
         
-        self.view.frame.size.height = self.view.frame.height - keyboardFrame.height - 15
-
-        self.view.layoutIfNeeded()
-        self.collectionView.scrollToItem(at: IndexPath(item: 0, section: self.messages.count - 1), at: .top, animated: true)
+        let difference = keyboardFrame.height - bottomSpace
+        self.view.transform = CGAffineTransform(translationX: 0, y: -difference - 8)
     }
     
     @objc fileprivate func handleKeyboardHide() {
         UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-
-            self.view.frame = UIScreen.main.bounds
             
             self.collectionView.scrollToItem(at: IndexPath(item: 0, section: self.messages.count - 1), at: .top, animated: true)
             self.view.transform = .identity
@@ -360,7 +361,7 @@ extension ChatBoxController: UICollectionViewDelegate, UICollectionViewDataSourc
         cell.messageLabel.text = messageText
         let estimatedRect = calculateSizeForMessageTextView(text: messageText)
         
-        if self.messages[indexPath.section].sentBy != AuthService.instance.userId {
+        if self.messages[indexPath.section].sentBy?._id != AuthService.instance.userId {
             
             cell.textBubbleView.backgroundColor = .white
             cell.textBubbleView.layer.borderColor = UIColor(white: 0.95, alpha: 1).cgColor
@@ -394,4 +395,29 @@ extension ChatBoxController: UICollectionViewDelegate, UICollectionViewDataSourc
         return 0
     }
     
+}
+
+
+extension ChatBoxController: UNUserNotificationCenterDelegate {
+    
+    // called when user interacts with notification (app not running in foreground)
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse, withCompletionHandler
+        completionHandler: @escaping () -> Void) {
+        
+        // do something with the notification
+        print(response.notification.request.content.userInfo)
+        
+        // the docs say you should execute this asap
+        return completionHandler()
+    }
+    
+    // called if app is running in foreground
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent
+        notification: UNNotification, withCompletionHandler completionHandler:
+        @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        // show alert while app is running in foreground
+        return completionHandler([.sound, .alert, .badge])
+    }
 }
